@@ -3,7 +3,7 @@ import { Navbar as BootstrapNavbar, Container, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-const Navbar = () => {
+const Navbar = ({ onShowAddModal, fetchEmployees }) => {
   const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
   const [loadingImport, setLoadingImport] = useState(false);
@@ -32,23 +32,23 @@ const Navbar = () => {
     }
   };
 
-  const handleExportXlsx = async () => {
-    try {
-      const response = await axios.get('http://localhost:3001/api/employees/export-excel', { responseType: 'blob' });
-      const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'employees.xlsx';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error('Export failed', error);
-      alert('Failed to export employees.');
-    }
-  };
+  // const handleExportXlsx = async () => {
+  //   try {
+  //     const response = await axios.get('http://localhost:3001/api/employees/export-excel', { responseType: 'blob' });
+  //     const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  //     const url = window.URL.createObjectURL(blob);
+  //     const a = document.createElement('a');
+  //     a.href = url;
+  //     a.download = 'employees.xlsx';
+  //     document.body.appendChild(a);
+  //     a.click();
+  //     a.remove();
+  //     window.URL.revokeObjectURL(url);
+  //   } catch (error) {
+  //     console.error('Export failed', error);
+  //     alert('Failed to export employees.');
+  //   }
+  // };
 
   const handleFileSelect = (e) => {
     setFile(e.target.files[0]);
@@ -72,6 +72,8 @@ const Navbar = () => {
         },
       });
       alert('Employees imported successfully!');
+        fetchEmployees(); // Data ko dobara fetch kare
+      
     } catch (error) {
       console.error('Import failed', error);
       alert(error.response?.data?.message || 'Failed to import employees.');
@@ -100,9 +102,9 @@ const Navbar = () => {
             <i className='fas fa-file-csv me-2'></i> Export CSV
           </Button>
 
-          <Button variant='outline-info' className='py-2 d-flex align-items-center' onClick={handleExportXlsx}>
+          {/* <Button variant='outline-info' className='py-2 d-flex align-items-center' onClick={handleExportXlsx}>
             <i className='fas fa-file-excel me-2'></i> Export Excel
-          </Button>
+          </Button> */}
 
           {/* Hidden file input for import */}
           <input
