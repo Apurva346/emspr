@@ -10,7 +10,7 @@ const Searchbar = ({ onSearch, onClear, value }) => {
             </InputGroup.Text>
             <Form.Control
                 type="text"
-                placeholder="Search by ID, name, manager, department, or salary"
+                placeholder="Search by ID, name, manager, department or salary"
                 value={value}
                 onChange={(e) => onSearch(e.target.value)}
             />

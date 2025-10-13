@@ -3,34 +3,34 @@ import { Navbar as BootstrapNavbar, Container, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-const Navbar = ({ onShowAddModal, fetchEmployees }) => {
+const Navbar = ({ onShowAddModal, fetchEmployees, searchTerm, statusFilter, fetchEmployeesWithSearch }) => {
   const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
   const [loadingImport, setLoadingImport] = useState(false);
-
+  
   useEffect(() => {
     if (file) {
       handleImport();
     }
   }, [file]);
 
-  const handleExportCsv = async () => {
-    try {
-      const response = await axios.get('http://localhost:3001/api/employees/export-csv', { responseType: 'blob' });
-      const blob = new Blob([response.data], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'employees.csv';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error('Export failed', error);
-      alert('Failed to export employees.');
-    }
-  };
+  // const handleExportCsv = async () => {
+  //   try {
+  //     const response = await axios.get('http://localhost:3001/api/employees/export-csv', { responseType: 'blob' });
+  //     const blob = new Blob([response.data], { type: 'text/csv' });
+  //     const url = window.URL.createObjectURL(blob);
+  //     const a = document.createElement('a');
+  //     a.href = url;
+  //     a.download = 'employees.csv';
+  //     document.body.appendChild(a);
+  //     a.click();
+  //     a.remove();
+  //     window.URL.revokeObjectURL(url);
+  //   } catch (error) {
+  //     console.error('Export failed', error);
+  //     alert('Failed to export employees.');
+  //   }
+  // };
 
   // const handleExportXlsx = async () => {
   //   try {
@@ -49,6 +49,36 @@ const Navbar = ({ onShowAddModal, fetchEmployees }) => {
   //     alert('Failed to export employees.');
   //   }
   // };
+
+  const handleExportCsv = async () => {
+    try {
+      // 💡 Export URL mein search aur filter parameters jodein
+      const exportUrl = `http://localhost:3001/api/employees/export-csv?search=${searchTerm}&filter=${statusFilter}`;
+      
+      const response = await axios.get(exportUrl, { responseType: 'blob' });
+      
+      // ... baki CSV download logic same rahega
+      const blob = new Blob([response.data], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      // Download filename mein filter jodne ke liye bhi logic laga sakte hain
+      a.download = `employees_${statusFilter}_${searchTerm || 'all'}.csv`; 
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+
+    } catch (error) {
+      console.error('Export failed', error);
+      // Agar '404 No employees found' message aaye toh usko alert karein
+      if (error.response && error.response.status === 404) {
+          alert("No employees found to export with the current search and filters.");
+      } else {
+          alert('Failed to export employees.');
+      }
+    }
+  };
 
   const handleFileSelect = (e) => {
     setFile(e.target.files[0]);
