@@ -14,7 +14,7 @@ const Home = ({ loading, onDetails, fetchEmployees, onShowAddModal }) => {
   const [employeesPerPage] = useState(5)
   const [employees, setEmployees] = useState([]) // Add state for employees
   const [searchTerm, setSearchTerm] = useState('') // Add state for search term
-  const [statusFilter, setStatusFilter] = useState('All')
+  const [statusFilter, setStatusFilter] = useState('Active')
   const navigate = useNavigate()
 
   const [showModal, setShowModal] = useState(false)
