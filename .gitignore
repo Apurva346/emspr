@@ -1,0 +1,30 @@
+# Logs
+frontend/ems/logs
+frontend/ems/*.log
+frontend/ems/npm-debug.log*
+frontend/ems/yarn-debug.log*
+frontend/ems/yarn-error.log*
+frontend/ems/pnpm-debug.log*
+frontend/ems/lerna-debug.log*
+
+frontend/ems/node_modules
+frontend/ems/dist
+frontend/ems/dist-ssr
+frontend/ems/*.local
+
+# Editor directories and files
+frontend/ems/.vscode/*
+frontend/ems/!.vscode/extensions.json
+frontend/ems/.idea
+frontend/ems/.DS_Store
+frontend/ems/*.suo
+frontend/ems/*.ntvs*
+frontend/ems/*.njsproj
+frontend/ems/*.sln
+frontend/ems/*.sw?
+
+
+backend/uploads
+backend/node_modules
+backend/.env
+frontend/ems/.env

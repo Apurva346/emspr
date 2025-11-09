@@ -1,0 +1,15 @@
+/* Remove only valid/invalid icons for text/number inputs */
+input.form-control.is-valid,
+input.form-control.is-invalid {
+  background-image: none !important;
+  padding-right: 0.75rem; /* optional spacing */
+}
+
+/* Keep the arrow for select dropdown */
+select.form-control.is-valid,
+select.form-control.is-invalid {
+  background-image: none; /* valid/invalid icons removed */
+  /* Do NOT set !important for select, so default arrow stays */
+}
+
+
