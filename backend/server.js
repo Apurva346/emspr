@@ -21,11 +21,12 @@ require('dotenv').config();
 
 
 const app = express();
-const port = process.env.API_PORT
+const port = process.env.API_PORT || 3001;
 
 // Mock Secret Key (***CHANGE THIS IN PRODUCTION***)
 // const JWT_SECRET = 'your_super_secret_jwt_key_12345'; // <-- ADDED
-const JWT_SECRET = 'new_secret_key_67890_finance_app'; // <-- इस Value का उपयोग करें
+// const JWT_SECRET = 'new_secret_key_67890_finance_app'; // <-- इस Value का उपयोग करें
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // ==================== MIDDLEWARE SETUP ====================
 app.use(cors());
@@ -53,13 +54,24 @@ const upload = multer({ storage });
 const csvUpload = multer({ dest: 'temp-uploads/' });
 
 // ==================== DATABASE CONNECTION ====================
+// const db = mysql.createPool({
+//   host: 'localhost',
+//   user: 'root',
+//   password: '',
+//   database: 'sp_finance',
+//   port: 3307
+// });
+
+
+
 const db = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'sp_finance',
-  port: 3307
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT
 });
+
 
 // ==================== AUTH MIDDLEWARE ====================
 const authenticateToken = (req, res, next) => {
