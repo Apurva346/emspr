@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Form, Button, Card, Alert, Row, Col, Image } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import axios from './axiosconfig'
 import './AddEmployee.css';
 
 
@@ -36,7 +36,7 @@ const AddEmployee = () => {
   const [profileImage, setProfileImage] = useState(null)
   const [imagePreviewUrl, setImagePreviewUrl] = useState(null)
 
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  // const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 
   // Effect for creating a local image preview URL
@@ -78,7 +78,7 @@ const AddEmployee = () => {
         imageData.append('image', profileImage)
 
         const uploadResponse = await axios.post(
-          `${API_BASE_URL}/upload`,
+          '/upload',
           imageData
         )
         profilePicUrl = uploadResponse.data.imageUrl
@@ -92,7 +92,7 @@ const AddEmployee = () => {
       }
 
       const response = await axios.post(
-        `${API_BASE_URL}/employees`,
+        '/employees',
         employeeData
       )
 

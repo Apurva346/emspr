@@ -1,3 +1,674 @@
 .container{
     margin-top: 200PX;
 }
+
+:root {
+    --card-radius: 18px;
+    --accent-1: #6a11cb;
+    --accent-2: #2575fc;
+    --muted: #6c757d;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial;
+    background: linear-gradient(180deg, #7f66ab 0%, #563680 35%, #5d88c8 100%);
+    padding: 24px 16px;
+    color: #222;
+}
+
+/* Header card */
+.top-card {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95));
+    border-radius: var(--card-radius);
+    box-shadow: 0 8px 28px rgba(20, 20, 50, 0.08);
+    padding: 28px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 15px;
+}
+
+.title-block h1 {
+    font-size: 2rem;
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+.total-pill {
+    background: linear-gradient(135deg, #7b61ff, #3db0ff);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(61, 176, 255, 0.18);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+/* Logout button */
+.btn-logout {
+    background: linear-gradient(135deg, #ff6b6b, #ff4757);
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-weight: 600;
+    box-shadow: 0 6px 18px rgba(255, 107, 107, 0.18);
+    transition: all 0.3s ease;
+}
+
+.btn-logout:hover {
+    background: linear-gradient(135deg, #ff4757, #ff2e63);
+    transform: translateY(-2px);
+}
+
+/* Search + add row */
+.search-row {
+    background: white;
+    border-radius: var(--card-radius);
+    box-shadow: 0 8px 28px rgba(20, 20, 50, 0.06);
+    padding: 18px;
+    margin-bottom: 12px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+}
+
+.search-left {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    width: 100%;
+}
+
+.search-left .form-control {
+    min-width: 480px;
+    max-width: 70%;
+}
+
+/* Filters row */
+.filter-row {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95));
+    border-radius: var(--card-radius);
+    padding: 12px 20px;
+    margin: 20px auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 8px 28px rgba(20, 20, 50, 0.04);
+}
+
+/* gradient button styles */
+.btn-grad {
+    border: none;
+    color: white;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 8px 14px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    transition: transform .12s, box-shadow .12s, opacity .12s;
+}
+
+/* === Active Filter Button Styling === */
+.filter-row .btn.active {
+    position: relative;
+    transform: scale(1.05);
+    box-shadow: 0 0 14px rgba(100, 100, 255, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    animation: pulseActive 1.5s ease-in-out infinite;
+}
+
+/* Hover effect for all buttons */
+.filter-row .btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    opacity: 0.95;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* Pulse Animation */
+@keyframes pulseActive {
+    0% {
+        box-shadow: 0 0 10px rgba(140, 70, 255, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 20px rgba(140, 70, 255, 0.6);
+    }
+
+    100% {
+        box-shadow: 0 0 10px rgba(140, 70, 255, 0.4);
+    }
+}
+
+#btnAdd {
+    white-space: nowrap;
+    /* Prevents text from breaking into two lines */
+    display: inline-flex;
+    /* Keeps icon + text aligned */
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    /* Space between icon and text */
+    padding: 8px 16px;
+}
+
+.g-active.active {
+    box-shadow: 0 0 16px rgba(33, 160, 160, 0.6);
+}
+
+.g-inactive.active {
+    box-shadow: 0 0 16px rgba(120, 120, 120, 0.6);
+}
+
+.g-resigned.active {
+    box-shadow: 0 0 16px rgba(102, 113, 255, 0.6);
+}
+
+.g-black.active {
+    box-shadow: 0 0 16px rgba(255, 88, 88, 0.6);
+}
+
+.btn-grad:active {
+    transform: translateY(1px);
+}
+
+.btn-grad:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+}
+
+.g-all {
+    background: linear-gradient(135deg, #78ffd6, #a8ff78);
+    color: #072;
+}
+
+.g-active {
+    background: linear-gradient(135deg, #57d9a3, #21a0a0);
+}
+
+.g-inactive {
+    background: linear-gradient(135deg, #bdbdbd, #8f8f8f);
+}
+
+.g-resigned {
+    background: linear-gradient(135deg, #a7b1ff, #6671ff);
+}
+
+.g-black {
+    background: linear-gradient(135deg, #ff9797, #ff5858);
+}
+
+.op-btn {
+    background: linear-gradient(135deg, #72a8ff, #9b63ff);
+}
+
+.sample-btn {
+    background: linear-gradient(135deg, #a0d8ff, #d0f0ff);
+    color: #042;
+}
+
+.import-btn {
+    background: linear-gradient(135deg, #ffb979, #ff7b59);
+    color: #fff;
+}
+
+.export-btn {
+    background: linear-gradient(135deg, #9ae6b4, #29c47a);
+    color: #042;
+}
+
+/* Table card */
+.table-card {
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 8px 28px rgba(20, 20, 50, 0.06);
+    margin-top: 12px;
+    /* 🔹 Remove internal padding */
+    padding: 0;
+    /* 🔹 Keep corners neat with rounded border */
+    overflow: hidden;
+}
+
+/* === Table Styling (Clean & Unified) === */
+.table {
+    border-radius: 12px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-collapse: collapse !important;
+}
+
+/* Header Styling */
+.table thead th {
+    background: linear-gradient(90deg, #8e2de2, #b069ff);
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+    border: none;
+    vertical-align: middle;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    border-bottom: 2px solid #dee2e6;
+}
+.table tbody tr {
+  background-color: #fff;
+  border-radius: 0 !important;
+  margin: 0 !important;
+}
+
+/* Optional hover style */
+.table tbody tr:hover {
+  background-color: #f9fafb;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Table Body Styling */
+.table tbody td {
+    vertical-align: middle;
+    text-align: center;
+    background: #ffffff;
+    border: 1px solid #eee;
+    padding: 12px;
+}
+
+/* Hover Effect */
+.table-hover tbody tr:hover {
+    background-color: #f0ebff;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+/* Striped Rows */
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #faf8ff;
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: #f6f2ff;
+}
+
+/* Responsive Table */
+.table-card .table-responsive {
+    margin: 0;
+    padding: 0;
+    border-radius: inherit;
+}
+
+/* Table Borders */
+.table td,
+.table th {
+    border: 1px solid #e0e0e0;
+    padding: 12px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Action Buttons */
+.table .btn {
+    border-radius: 6px;
+    font-weight: 600;
+    padding: 5px 12px;
+    transition: 0.2s;
+}
+
+/* Button Colors */
+.btn-info {
+    background: linear-gradient(45deg, #00c6ff, #0072ff);
+    border: none;
+    color: #fff;
+}
+
+.btn-success {
+    background: linear-gradient(45deg, #56ab2f, #a8e063);
+    border: none;
+    color: #fff;
+}
+
+.btn-danger {
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    border: none;
+    color: #fff;
+}
+
+/* Button Hover */
+.btn:hover {
+    opacity: 0.9;
+    transform: scale(1.05);
+}
+
+.action-btn {
+    margin: 0 4px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    color: #fff;
+    border: none;
+}
+
+.action-details {
+    background: linear-gradient(90deg, #57a6ff, #1466ff);
+}
+
+.action-edit {
+    background: linear-gradient(90deg, #00c985, #009f6b);
+}
+
+.action-del {
+    background: linear-gradient(90deg, #ff5c7c, #ff2d55);
+}
+
+/* Pagination area */
+.pagination-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 16px;
+    margin-top: 0;
+    background: white;
+    border-top: 1px solid #eee;
+    border-radius: 0 0 18px 18px;
+}
+
+.pagination {
+    display: flex;
+    gap: 6px;
+    margin: 0;
+}
+
+/* Pagination Buttons */
+.pagination .page-item .page-link {
+    background: linear-gradient(135deg, #8e2de2, #b069ff);
+    color: #fff;
+    border: 2px solid transparent;
+    /* ✅ same thickness for all */
+    border-radius: 10px;
+    font-weight: 600;
+    padding: 6px 12px;
+    min-width: 38px;
+    /* ✅ consistent width */
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 10px rgba(142, 45, 226, 0.2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hover effect */
+.pagination .page-item .page-link:hover {
+    background: linear-gradient(135deg, #b069ff, #8e2de2);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(142, 45, 226, 0.3);
+}
+
+/* Active Page */
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #ff7bd0, #b069ff);
+    box-shadow: 0 6px 18px rgba(176, 105, 255, 0.4);
+    border: 3px solid #8e2de2;
+    /* ✅ same thickness — visually balanced */
+}
+
+/* Disabled state */
+.pagination .page-item.disabled .page-link {
+    background: #ddd;
+    color: #777;
+    cursor: not-allowed;
+    box-shadow: none;
+    border: 2px solid transparent;
+    /* ✅ same border thickness */
+}
+
+/* ‹ › Buttons */
+.pagination .page-item:first-child .page-link,
+.pagination .page-item:last-child .page-link {
+    font-weight: 700;
+    font-size: 16px;
+    padding: 6px 10px;
+    min-width: 34px;
+}
+
+/* Employee Modal */
+.employee-modal-dialog {
+    max-height: 80vh;
+    /* Modal full height */
+}
+
+.employee-modal-body {
+    max-height: 60vh;
+    /* Scrollable area limited to visible fields */
+    overflow-y: auto;
+    /* Scrollbar for vertical scrolling */
+    padding-right: 15px;
+    /* scrollbar spacing */
+}
+
+/* Optional: Form field valid/invalid styling */
+.is-valid {
+    border-color: green;
+}
+
+.is-invalid {
+    border-color: red;
+}
+
+/* Scrollbar style (optional) */
+.employee-modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.employee-modal-body::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.employee-modal-body::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.employee-modal .modal-content {
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.custom-header {
+    background: linear-gradient(90deg, #007bff, #00b4d8);
+    padding: 15px 20px;
+    border-bottom: none;
+}
+
+.profile-circle {
+    background-color: white;
+    color: #007bff;
+    width: 55px;
+    height: 55px;
+    font-size: 22px;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-body-scroll {
+    max-height: 50vh;
+    /* 👈 height कमी केली (पूर्वी 75vh होती) */
+    overflow-y: auto;
+    background-color: #f8f9fa;
+    padding: 20px;
+    /* थोडं padding कमी केलं जेणेकरून compact दिसेल */
+}
+
+.custom-input {
+    border-radius: 10px !important;
+    border: 1px solid #ced4da;
+    transition: 0.3s;
+}
+
+.custom-input:focus {
+    border-color: #007bff !important;
+    box-shadow: 0 0 0 0.15rem rgba(0, 123, 255, 0.25);
+}
+
+.custom-footer {
+    background-color: #f1f3f6;
+    border-top: none;
+    padding: 15px 25px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.modal-dialog {
+    max-width: 600px;
+    /* 👈 पूर्वी 800+ default असतं */
+    width: 90%;
+    /* responsive — small screen वर नीट दिसेल */
+    margin: auto;
+}
+
+/* Modal header + footer थोडं compact आणि neat */
+.modal-header,
+.modal-footer {
+    padding: 10px 20px;
+}
+
+/* Remove scrollbar from employee table */
+.table-responsive {
+    overflow: visible !important;
+    /* 👈 scrollbar hide करतो */
+}
+
+/* Optional: table अधिक neat दिसण्यासाठी */
+.table {
+    border-collapse: separate;
+    border-spacing: 0 8px;
+}
+
+.table thead th {
+    background-color: #f1f3f5;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.table tbody tr {
+    background-color: #fff;
+    border-radius: 8px;
+    transition: transform 0.1s ease;
+}
+
+.table tbody tr:hover {
+    transform: scale(1.01);
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08);
+}
+/* 🌟 Common Styling for Modal Form */
+.employee-modal .modal-content {
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  max-height: 85vh; /* 👈 Prevents oversize modal */
+}
+
+/* Modal Header */
+.employee-modal .modal-header {
+  padding: 12px 18px;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+/* Profile Circle in Header */
+.employee-modal .profile-circle {
+  background-color: #f5f5f5;
+  border-radius: 50%;
+  font-size: 20px;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333333;
+}
+
+/* Modal Body scrollable */
+.employee-modal .modal-body-scroll {
+  max-height: calc(85vh - 140px); /* 👈 Compact scrollable area */
+  overflow-y: auto;
+  padding: 10px 18px;
+}
+
+/* Inputs */
+.custom-input {
+  border-radius: 5px;
+  border: 1px solid #dddddd;
+  padding: 6px 10px;
+  font-size: 13px;
+  transition: all 0.15s ease;
+}
+
+.custom-input:focus {
+  border-color: #007bff;
+  box-shadow: none;
+}
+
+/* ✅ Validation Styles */
+.custom-input.is-valid {
+  border-color: #28a745;
+}
+
+.custom-input.is-invalid {
+  border-color: #dc3545;
+}
+
+/* 🆕 Save/Cancel Button Footer */
+.employee-modal .modal-footer {
+  border-top: none;
+  padding: 12px 18px;
+}
+
+/* 🆕 Button Styling */
+.employee-modal .btn-success,
+.employee-modal .btn-secondary {
+  padding: 6px 20px;
+  font-size: 13px;
+  border-radius: 5px;
+  font-weight: 500;
+}
+
+/* 🌟 View Mode Styling (Card-Like Values) */
+.employee-modal .view-data p {
+  font-size: 13px;
+  margin-bottom: 3px;
+}
+
+.employee-modal .view-data strong {
+  color: #5a5a5a;
+}
+
+/* Compact Profile in View Mode */
+.profile-big {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #e7e7e7;
+  font-size: 30px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  color: #222222;
+}
