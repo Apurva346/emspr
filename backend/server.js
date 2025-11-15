@@ -368,50 +368,6 @@ app.get('/api/employees/:id', authenticateToken, (req, res) => {
   });
 });
 
-// ==================== IMPORT CSV ====================
-// ADDED AUTHENTICATION MIDDLEWARE
-// app.post('/api/employees/import', authenticateToken, csvUpload.single('employeesFile'), (req, res) => {
-//   if (!req.file) return res.status(400).json({ message: 'No file uploaded.' });
-
-//   const filePath = req.file.path;
-//   const employeesToInsert = [];
-//   let rowCount = 0;
-//   let skippedRows = 0;
-
-//   const requiredFields = ['name', 'department', 'email', 'salary', 'phone', 'position', 'status', 'education', 'working_mode', 'emp_type', 'gender'];
-
-//   fs.createReadStream(filePath)
-//     .pipe(csv())
-//     .on('data', (row) => {
-//       rowCount++;
-//       const isValid = requiredFields.every(field => row[field] && row[field].trim() !== '');
-//       if (!isValid) {
-//         skippedRows++;
-//         return;
-//       }
-
-//       const safe = val => (val && val.trim() !== '' ? val.trim() : '-');
-//       employeesToInsert.push([
-//         safe(row.name), safe(row.position), safe(row.email), safe(row.phone), safe(row.gender),
-//         safe(row.joining), safe(row.leaving), safe(row.department), safe(row.status),
-//         safe(row.working_mode), safe(row.emp_type), safe(row.salary), safe(row.profile_pic),
-//         safe(row.manager), safe(row.birth), safe(row.education), safe(row.address),
-//         safe(row.emer_cont_no), safe(row.relation), safe(row.referred_by)
-//       ]);
-//     })
-//     .on('end', () => {
-//       fs.unlinkSync(filePath);
-//       if (employeesToInsert.length === 0)
-//         return res.status(400).json({ message: `Import failed. No valid rows found. Total: ${rowCount}, Skipped: ${skippedRows}.` });
-
-//       const query = `INSERT INTO home (name, position, email, phone, gender, joining, leaving, department, status, working_mode, emp_type, salary, profile_pic, manager, birth, education, address, emer_cont_no, relation, referred_by)
-//         VALUES ?`;
-//       db.query(query, [employeesToInsert], (err, result) => {
-//         if (err) return res.status(500).json({ message: 'Database insert failed.' });
-//         res.status(200).json({ message: `${result.affectedRows} employees imported successfully. Skipped ${skippedRows}. Total processed: ${rowCount}.` });
-//       });
-//     });
-// });
 
 // ==================== IMPORT CSV (सुधारित Error Handling) ====================
 // ADDED AUTHENTICATION MIDDLEWARE

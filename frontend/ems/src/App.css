@@ -672,3 +672,33 @@ body {
   margin: auto;
   color: #222222;
 }
+
+/* In your CSS file (e.g., App.css) */
+
+/* 1. Header Container Styling */
+.header-container {
+    /* Set a consistent max-width to control the element's size */
+    max-width: 1652px; /* Use the same value for both the header and the table wrapper */
+    margin: 0 auto; /* Keeps the container centered */
+    
+    /* ... (rest of your styles like padding, background, border-radius) ... */
+    padding: 20px 25px; 
+    background-color: #f7f5ff; 
+    border-radius: 15px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    margin-top: 20px; 
+    margin-bottom: 20px; 
+}
+
+/* 2. Table Container Styling (You may need to add this class to your table's parent component) */
+.table-container-wrapper {
+    /* This class should wrap your search bar, filters, and the actual table */
+    max-width: 1150px; /* **Crucial: Must match the header's max-width** */
+    margin: 0 auto; /* Keeps the container centered and aligned with the header */
+    
+    /* Apply a similar card style if the table is also inside a card */
+    padding: 20px 25px; 
+    background-color: #ffffff; /* Typically white for the table body */
+    border-radius: 15px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+}
