@@ -161,12 +161,14 @@ const AddEmployee = () => {
             </Col>
             <Col md={6}>
               <Form.Group className='mb-3' controlId='formManager'>
-                <Form.Label>Manager</Form.Label>
+                <Form.Label>Manager<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Form.Label>
                 <Form.Control
                   type='text'
                   name='manager'
                   value={formData.manager}
                   onChange={handleChange}
+                  required isInvalid={formData.manager.trim() === ""}       // 🔴 red when empty
+                  isValid={formData.manager.trim() !== ""}         // ✅ green when filled
                 />
               </Form.Group>
             </Col>
@@ -186,9 +188,16 @@ const AddEmployee = () => {
                 isValid={formData.department !== ""}     // ✅ Green when selected
                 >
                   <option value=''>Select Department</option>
-                  <option value='it'>IT</option>
-                  <option value='testing'>Testing</option>
-                  <option value='development'>Development</option>
+                  <option value='It'>IT</option>
+                  <option value='Testing'>Testing</option>
+                  <option value='Development'>Development</option>
+                  <option value='Marketing'>Marketing</option>
+                  <option value='Finance'>Finance</option>
+                  <option value='Operation Management'>Operation Management</option>
+                  <option value='HR'>HR</option>
+                  <option value='Sales'>Sales</option>
+                  <option value='Production'>Production</option>
+                  <option value='Administration'>Administration</option>
                 </Form.Select>
               </Form.Group>
             </Col>
@@ -341,9 +350,9 @@ const AddEmployee = () => {
                     isValid={formData.status !== ""}     // ✅ Green when selected
                 >
                   <option value=''>Select Status</option>
-                  <option value='active'>Active</option>
-                  <option value='inactive'>Inactive</option>
-                  <option value='blacklist'>Blacklist</option>
+                  <option value='Active'>Active</option>
+                  <option value='Inactive'>Inactive</option>
+                  <option value='Blacklist'>Blacklist</option>
                 </Form.Select>
               </Form.Group>
             </Col>

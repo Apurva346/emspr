@@ -26,7 +26,7 @@ frontend/ems/*.sw?
 
 backend/uploads
 backend/node_modules
-backend/.env
+# backend/.env
 # frontend/ems/.env
 
 .vscode

@@ -46,11 +46,11 @@ const Searchbar = ({ onSearch, onClear, value }) => {
 
       {/* 🧹 Clear Button */}
       <Button className="py-2" variant="dark" onClick={onClear}>
-        <i className="fa-solid fa-eraser me-2"></i>Clear
+        <i className="fa-solid fa-eraser me-2"></i>
       </Button>
 
       {/* ➕ Add Employee Button (Navbar मधून हलवलेली) */}
-      <Link to="/add-employee" className="btn-grad op-btn" id='btnAdd'>
+      <Link to="/add-employee" className="btn-grad op-btn" id='btnAdd' style={{ textDecoration: 'none' }}>
         <i className="fas fa-user-plus me-2"></i>Add Employee
       </Link>
     </InputGroup>
