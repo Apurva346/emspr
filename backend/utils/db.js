@@ -26,7 +26,7 @@ const getDB = () => {
         throw new Error("Database pool not initialized. Call initDBPool first."); 
     }
     return db;
-};
+};   
 
 module.exports = {
     initDBPool,
