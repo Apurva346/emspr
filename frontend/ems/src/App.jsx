@@ -7,7 +7,7 @@ import EditEmployee from './Components/EditEmployee';
 import AddEmployee from './Components/AddEmployee';
 import api from './Components/axiosconfig';
 import EmployeeDetails from './Components/EmployeeDetails';
-// import Header from './Components/Header'; // Header Component import केला
+import Header from './Components/Header'; // Header Component import केला
 
 // --- MainLayout Component (Protected Routes साठी Wrapper) ---
 const MainLayout = ({ totalEmployees, setTotalEmployees }) => {
@@ -46,19 +46,19 @@ const MainLayout = ({ totalEmployees, setTotalEmployees }) => {
     };
 
     return (
-        // <Container fluid className='p-0'>
-        //     {/* Header इथे रेंडर करा, तो आता प्रत्येक Nested Route वर दिसेल */}
-        //     <Header 
-        //         totalEmployees={totalEmployees} 
-        //         onLogout={handleLogout}           
-        //     />
+        <Container fluid className='p-0'>
+            {/* Header इथे रेंडर करा, तो आता प्रत्येक Nested Route वर दिसेल */}
+            <Header 
+                totalEmployees={totalEmployees} 
+                onLogout={handleLogout}           
+            />
             
-        //     {/* Outlet हे सध्याचा Nested Route Component रेंडर करेल. 
-        //         refreshTotalCount फंक्शन Context म्हणून पास केला आहे. */}
-        //     <div className="main-content p-3">
-        //          <Outlet context={{ refreshTotalCount: fetchTotalEmployees }}/> 
-        //     </div>
-        // </Container>
+            {/* Outlet हे सध्याचा Nested Route Component रेंडर करेल. 
+                refreshTotalCount फंक्शन Context म्हणून पास केला आहे. */}
+            <div className="main-content p-3">
+                 <Outlet context={{ refreshTotalCount: fetchTotalEmployees }}/> 
+            </div>
+        </Container>
     );
 };
 // ---------------------------------------------------------------
