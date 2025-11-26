@@ -31,13 +31,13 @@ const Header = ({ totalEmployees, onLogout, userId }) => {
             </div>
 
             {/* Header Bottom: Aligns total count and logout button using flexbox */}
-            <div className="header-bottom d-flex justify-content-between align-items-center mx-auto" style={{ maxWidth: '600px' }}>
+            <div className="header-bottom d-flex justify-content-between align-items-center mx-auto" style={{ maxWidth: '100%', padding: '0 20px' }}>
                 
                 {/* Total Employee Count Pill (Disabled button style) */}
                 <div 
                     className="total-pill px-3 py-2 rounded-pill shadow-sm"
                     style={{
-                        backgroundColor: '#17a2b8', // Info Blue
+                        backgroundColor: '#17a2b8', // Info Blue 
                         color: 'white',
                         fontWeight: '600',
                         fontSize: '0.9rem'
