@@ -14,7 +14,7 @@ body {
     margin: 0;
     font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial;
     background: linear-gradient(180deg, #7f66ab 0%, #563680 35%, #5d88c8 100%);
-    padding: 24px 16px;
+    padding: 10px 16px;
     color: #222;
 }
 
@@ -693,7 +693,7 @@ body {
 /* 2. Table Container Styling (You may need to add this class to your table's parent component) */
 .table-container-wrapper {
     /* This class should wrap your search bar, filters, and the actual table */
-    max-width: 1150px; /* **Crucial: Must match the header's max-width** */
+    max-width: 1652px; /* **Crucial: Must match the header's max-width** */
     margin: 0 auto; /* Keeps the container centered and aligned with the header */
     
     /* Apply a similar card style if the table is also inside a card */
