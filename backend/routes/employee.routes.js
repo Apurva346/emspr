@@ -425,7 +425,7 @@ router.post('/employees', authenticateToken, (req, res) => {
         manager || '', 
         birth || null, 
         education, 
-        address || null, 
+        address || "", 
         emer_cont_no || '', 
         relation || '', 
         referred_by || ''
