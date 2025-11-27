@@ -445,6 +445,32 @@ router.post('/employees', authenticateToken, (req, res) => {
 
 
 // ==================== UPDATE EMPLOYEE (Protected) ====================
+// router.put('/employees/:id', authenticateToken, (req, res) => {
+//     const { id } = req.params;
+//     const {
+//         name, position, email, phone, gender, joining, leaving,
+//         department, status, working_mode, emp_type, salary,
+//         profile_pic, manager, birth, education, address, emer_cont_no, relation, referred_by
+//     } = req.body;
+
+//     // Note: It's good practice to ensure all necessary fields for UPDATE are present, but assuming
+//     // the frontend sends a complete object.
+
+//     const query = `UPDATE home SET name=?, position=?, email=?, phone=?, gender=?, joining=?, leaving=?, department=?, status=?, working_mode=?, emp_type=?, salary=?, profile_pic=?, manager=?, birth=?, education=?, address=?, emer_cont_no=?, relation=?, referred_by=? WHERE id=?`;
+//     const values = [name, position, email, phone, gender, joining, leaving, department, status,
+//         working_mode, emp_type, salary, profile_pic, manager, birth, education, address, emer_cont_no, relation, referred_by, id];
+
+//     db.query(query, values, (err, result) => {
+//         if (err) {
+//             console.error("❌ Employee Update Error:", err);
+//             return res.status(500).json({ message: 'Database update error', error: err.message });
+//         }
+
+//         if (result.affectedRows === 0) return res.status(404).json({ message: 'Employee not found.' });
+//         res.status(200).json({ message: 'Employee updated successfully!' });
+//     });
+// });
+
 router.put('/employees/:id', authenticateToken, (req, res) => {
     const { id } = req.params;
     const {
@@ -453,20 +479,34 @@ router.put('/employees/:id', authenticateToken, (req, res) => {
         profile_pic, manager, birth, education, address, emer_cont_no, relation, referred_by
     } = req.body;
 
-    // Note: It's good practice to ensure all necessary fields for UPDATE are present, but assuming
-    // the frontend sends a complete object.
+    // 🌟 महत्त्वाचा बदल 1: 'leaving' व्हॅल्यू तपासणे आणि स्वच्छ करणे
+    // जर leaving व्हॅल्यू रिकामी स्ट्रिंग ('') असेल, तर तिला SQL NULL म्हणून सेट करा.
+    let leavingValue = leaving; 
+    if (leavingValue === '' || leavingValue === undefined || leavingValue === null) {
+        leavingValue = null; // Node.js 'null' हे MySQL 'NULL' मध्ये आपोआप मॅप होते.
+    }
 
-    const query = `UPDATE home SET name=?, position=?, email=?, phone=?, gender=?, joining=?, leaving=?, department=?, status=?, working_mode=?, emp_type=?, salary=?, profile_pic=?, manager=?, birth=?, education=?, address=?, emer_cont_no=?, relation=?, referred_by=? WHERE id=?`;
-    const values = [name, position, email, phone, gender, joining, leaving, department, status,
-        working_mode, emp_type, salary, profile_pic, manager, birth, education, address, emer_cont_no, relation, referred_by, id];
+    const query = `UPDATE home SET 
+        name=?, position=?, email=?, phone=?, gender=?, joining=?, leaving=?, 
+        department=?, status=?, working_mode=?, emp_type=?, salary=?, 
+        profile_pic=?, manager=?, birth=?, education=?, address=?, emer_cont_no=?, relation=?, referred_by=? 
+        WHERE id=?`;
+        
+    // 🌟 महत्त्वाचा बदल 2: VALUES ॲरेमध्ये सुधारित व्हॅल्यू वापरणे
+    const values = [
+        name, position, email, phone, gender, joining, leavingValue, // <--- येथे leavingValue वापरा
+        department, status, working_mode, emp_type, salary, 
+        profile_pic, manager, birth, education, address, emer_cont_no, relation, referred_by, id
+    ];
 
     db.query(query, values, (err, result) => {
         if (err) {
             console.error("❌ Employee Update Error:", err);
-            return res.status(500).json({ message: 'Database update error', error: err.message });
+            // डीबगिंगसाठी एररचा तपशील (err.sqlMessage) फ्रंटएंडला पाठवणे टाळावे, फक्त सामान्य मेसेज द्यावा.
+            return res.status(500).json({ message: 'Database update failed.', error: 'Server error during update.' });
         }
 
-        if (result.affectedRows === 0) return res.status(404).json({ message: 'Employee not found.' });
+        if (result.affectedRows === 0) return res.status(404).json({ message: 'Employee not found or data was the same.' });
         res.status(200).json({ message: 'Employee updated successfully!' });
     });
 });
