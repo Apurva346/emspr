@@ -298,7 +298,7 @@ import Combined from './Combined';
 import EmployeeDetails from './EmployeeDetails';
 import AddEmployee from './AddEmployee';
 import EditEmployee from './EditEmployee';
-import './home.css';
+import './Home.css';
 
 const Home = ({ loading }) => {
 

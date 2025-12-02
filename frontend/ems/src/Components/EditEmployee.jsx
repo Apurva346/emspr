@@ -912,18 +912,22 @@ const EditEmployee = ({ employeeData, onClose }) => {
     const [imageError, setImageError] = useState("");
     const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
 
-    // Load employee data
+        // Load employee data
     useEffect(() => {
         if (employeeData) {
             setFormData({
                 ...employeeData,
-                department: employeeData.department?.toLowerCase(), // ⭐ FIX
-                status: employeeData.status?.toLowerCase(),         // ⭐ FIX
+                department: employeeData.department?.trim().toLowerCase(),
+                status: employeeData.status?.trim().toLowerCase(),
+                working_mode: employeeData.working_mode?.trim().toLowerCase(),
+                emp_type: employeeData.emp_type?.trim().toLowerCase(),
+                gender: employeeData.gender?.trim().toLowerCase(),
             });
 
             setImagePreviewUrl(employeeData.profile_pic);
         }
     }, [employeeData]);
+
 
     // Preview image
     useEffect(() => {
@@ -1088,7 +1092,7 @@ const EditEmployee = ({ employeeData, onClose }) => {
                                         <option value='marketing'>Marketing</option>
                                         <option value='finance'>Finance</option>
                                         <option value='operation Management'>Operation Management</option>
-                                        <option value='hR'>HR</option>
+                                        <option value='hr'>HR</option>
                                         <option value='sales'>Sales</option>
                                         <option value='production'>Production</option>
                                         <option value='administration'>Administration</option>
