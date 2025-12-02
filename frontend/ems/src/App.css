@@ -702,3 +702,17 @@ body {
     border-radius: 15px; 
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
 }
+
+/* Card साठी अधिक स्पष्ट Shadow (shadow-2xl) */
+.shadow-2xl {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+                0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* ॲलाइनमेंटसाठी, body ला margin आणि padding नसावे */
+body {
+    min-height: 100vh;
+    margin: 0; /* महत्त्वाची सेटिंग */
+    padding: 0; /* महत्त्वाची सेटिंग */
+    /* ... तुमच्या इतर body स्टाईल्स ... */
+}

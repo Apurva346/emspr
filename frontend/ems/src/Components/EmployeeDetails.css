@@ -1,0 +1,19 @@
+.employee-card {
+    border-radius: 15px;
+}
+
+.employee-details-wrapper {
+    padding: 5px 20px;
+}
+
+.detail-box {
+    background: #f7f3ff;
+    padding: 10px 12px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    border: 1px solid #eee;
+}

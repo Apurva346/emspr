@@ -1,0 +1,12 @@
+.large-modal {
+  max-width: 95% !important;
+}
+
+.large-modal .modal-dialog {
+    max-width: 950px !important;
+}
+
+.large-modal .modal-content {
+    border-radius: 12px;
+}
+
