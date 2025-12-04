@@ -393,7 +393,7 @@ router.post('/employees', authenticateToken, (req, res) => {
     // --- ✅ Updated Validation Check (Matching Frontend Requirements) ---
     // Required Fields: name, position, email, phone, gender, department, status, working_mode, emp_type, salary, education
     if (!name || !position || !email || !phone || !gender || !department ||
-        !status || !working_mode || !emp_type || !salary || !education || !manager) {
+        !status || !working_mode || !emp_type || !salary || !education || !manager || !joining || ! birth) {
         
         console.warn('⚠️ Missing required fields in ADD EMPLOYEE request:', req.body);
         return res.status(400).json({ message: 'Required fields (Name, Position, Email, Phone, Gender, Department, Status, Working Mode, Employee Type, Salary, Education, Manager) are missing.' });
@@ -443,8 +443,7 @@ router.post('/employees', authenticateToken, (req, res) => {
     });
 });
 
-
-// ==================== UPDATE EMPLOYEE (Protected) ====================
+//update
 // router.put('/employees/:id', authenticateToken, (req, res) => {
 //     const { id } = req.params;
 //     const {
@@ -453,38 +452,27 @@ router.post('/employees', authenticateToken, (req, res) => {
 //         profile_pic, manager, birth, education, address, emer_cont_no, relation, referred_by
 //     } = req.body;
 
-//     // Note: It's good practice to ensure all necessary fields for UPDATE are present, but assuming
-//     // the frontend sends a complete object.
+//     // --- 🌟 डेट व्हॅल्यू स्वच्छ करणे (Handling Optional Date Fields for MySQL) 🌟 ---
 
-//     const query = `UPDATE home SET name=?, position=?, email=?, phone=?, gender=?, joining=?, leaving=?, department=?, status=?, working_mode=?, emp_type=?, salary=?, profile_pic=?, manager=?, birth=?, education=?, address=?, emer_cont_no=?, relation=?, referred_by=? WHERE id=?`;
-//     const values = [name, position, email, phone, gender, joining, leaving, department, status,
-//         working_mode, emp_type, salary, profile_pic, manager, birth, education, address, emer_cont_no, relation, referred_by, id];
-
-//     db.query(query, values, (err, result) => {
-//         if (err) {
-//             console.error("❌ Employee Update Error:", err);
-//             return res.status(500).json({ message: 'Database update error', error: err.message });
-//         }
-
-//         if (result.affectedRows === 0) return res.status(404).json({ message: 'Employee not found.' });
-//         res.status(200).json({ message: 'Employee updated successfully!' });
-//     });
-// });
-
-// router.put('/employees/:id', authenticateToken, (req, res) => {
-//     const { id } = req.params;
-//     const {
-//         name, position, email, phone, gender, joining, leaving,
-//         department, status, working_mode, emp_type, salary,
-//         profile_pic, manager, birth, education, address, emer_cont_no, relation, referred_by
-//     } = req.body;
-
-//     // 🌟 महत्त्वाचा बदल 1: 'leaving' व्हॅल्यू तपासणे आणि स्वच्छ करणे
-//     // जर leaving व्हॅल्यू रिकामी स्ट्रिंग ('') असेल, तर तिला SQL NULL म्हणून सेट करा.
+//     // 1. 'joining' डेट व्हॅल्यू: '' ऐवजी null वापरा
+//     let joiningValue = joining; 
+//     if (joiningValue === '' || joiningValue === undefined || joiningValue === null) {
+//         joiningValue = null;
+//     }
+    
+//     // 2. 'leaving' डेट व्हॅल्यू: '' ऐवजी null वापरा
 //     let leavingValue = leaving; 
 //     if (leavingValue === '' || leavingValue === undefined || leavingValue === null) {
-//         leavingValue = null; // Node.js 'null' हे MySQL 'NULL' मध्ये आपोआप मॅप होते.
+//         leavingValue = null; 
 //     }
+
+//     // 3. 'birth' डेट व्हॅल्यू: '' ऐवजी null वापरा
+//     let birthValue = birth;
+//     if (birthValue === '' || birthValue === undefined || birthValue === null) {
+//         birthValue = null;
+//     }
+
+//     // -------------------------------------------------------------------
 
 //     const query = `UPDATE home SET 
 //         name=?, position=?, email=?, phone=?, gender=?, joining=?, leaving=?, 
@@ -492,17 +480,20 @@ router.post('/employees', authenticateToken, (req, res) => {
 //         profile_pic=?, manager=?, birth=?, education=?, address=?, emer_cont_no=?, relation=?, referred_by=? 
 //         WHERE id=?`;
         
-//     // 🌟 महत्त्वाचा बदल 2: VALUES ॲरेमध्ये सुधारित व्हॅल्यू वापरणे
+//     // VALUES ॲरेमध्ये सर्व सुधारित (sanitized) व्हॅल्यूज वापरणे
 //     const values = [
-//         name, position, email, phone, gender, joining, leavingValue, // <--- येथे leavingValue वापरा
+//         name, position, email, phone, gender, 
+//         joiningValue,    // 👈 joiningValue
+//         leavingValue,    // 👈 leavingValue
 //         department, status, working_mode, emp_type, salary, 
-//         profile_pic, manager, birth, education, address, emer_cont_no, relation, referred_by, id
+//         profile_pic, manager, 
+//         birthValue,      // 👈 birthValue
+//         education, address, emer_cont_no, relation, referred_by, id
 //     ];
 
 //     db.query(query, values, (err, result) => {
 //         if (err) {
 //             console.error("❌ Employee Update Error:", err);
-//             // डीबगिंगसाठी एररचा तपशील (err.sqlMessage) फ्रंटएंडला पाठवणे टाळावे, फक्त सामान्य मेसेज द्यावा.
 //             return res.status(500).json({ message: 'Database update failed.', error: 'Server error during update.' });
 //         }
 
@@ -510,7 +501,6 @@ router.post('/employees', authenticateToken, (req, res) => {
 //         res.status(200).json({ message: 'Employee updated successfully!' });
 //     });
 // });
-
 
 router.put('/employees/:id', authenticateToken, (req, res) => {
     const { id } = req.params;
@@ -520,25 +510,35 @@ router.put('/employees/:id', authenticateToken, (req, res) => {
         profile_pic, manager, birth, education, address, emer_cont_no, relation, referred_by
     } = req.body;
 
-    // --- 🌟 डेट व्हॅल्यू स्वच्छ करणे (Handling Optional Date Fields for MySQL) 🌟 ---
+    // --- 🌟 डेट व्हॅल्यू स्वच्छ करणे आणि फॉरमॅट करणे (Cleaning and Formatting Date Fields) 🌟 ---
 
-    // 1. 'joining' डेट व्हॅल्यू: '' ऐवजी null वापरा
-    let joiningValue = joining; 
-    if (joiningValue === '' || joiningValue === undefined || joiningValue === null) {
-        joiningValue = null;
-    }
+    // एक सहायक फंक्शन (Helper function) जे डेट व्हॅल्यूला YYYY-MM-DD मध्ये बदलते किंवा null ठेवते
+    const formatDateForMySQL = (dateString) => {
+        // जर व्हॅल्यू रिकामी स्ट्रिंग, undefined किंवा null असेल, तर null परत करा.
+        if (!dateString) { 
+            return null;
+        }
+        
+        try {
+            // ISO स्ट्रिंगला Date ऑब्जेक्टमध्ये रूपांतरित करा आणि YYYY-MM-DD फॉरमॅटमध्ये कापा.
+            // उदा: '2025-12-01T00:00:00.000Z' => '2025-12-01'
+            const dateObject = new Date(dateString);
+            return dateObject.toISOString().slice(0, 10);
+        } catch (e) {
+            // जर डेट व्हॅल्यू अवैध (Invalid) असेल, तर null परत करा.
+            console.error("Invalid date value provided:", dateString);
+            return null;
+        }
+    };
+
+    // 1. 'joining' डेट व्हॅल्यू
+    let joiningValue = formatDateForMySQL(joining);
     
-    // 2. 'leaving' डेट व्हॅल्यू: '' ऐवजी null वापरा
-    let leavingValue = leaving; 
-    if (leavingValue === '' || leavingValue === undefined || leavingValue === null) {
-        leavingValue = null; 
-    }
-
-    // 3. 'birth' डेट व्हॅल्यू: '' ऐवजी null वापरा
-    let birthValue = birth;
-    if (birthValue === '' || birthValue === undefined || birthValue === null) {
-        birthValue = null;
-    }
+    // 2. 'leaving' डेट व्हॅल्यू
+    let leavingValue = formatDateForMySQL(leaving);
+    
+    // 3. 'birth' डेट व्हॅल्यू
+    let birthValue = formatDateForMySQL(birth);
 
     // -------------------------------------------------------------------
 
@@ -551,18 +551,19 @@ router.put('/employees/:id', authenticateToken, (req, res) => {
     // VALUES ॲरेमध्ये सर्व सुधारित (sanitized) व्हॅल्यूज वापरणे
     const values = [
         name, position, email, phone, gender, 
-        joiningValue,    // 👈 joiningValue
-        leavingValue,    // 👈 leavingValue
+        joiningValue,    // ✅ YYYY-MM-DD किंवा null
+        leavingValue,    // ✅ YYYY-MM-DD किंवा null
         department, status, working_mode, emp_type, salary, 
         profile_pic, manager, 
-        birthValue,      // 👈 birthValue
+        birthValue,      // ✅ YYYY-MM-DD किंवा null
         education, address, emer_cont_no, relation, referred_by, id
     ];
 
     db.query(query, values, (err, result) => {
         if (err) {
             console.error("❌ Employee Update Error:", err);
-            return res.status(500).json({ message: 'Database update failed.', error: 'Server error during update.' });
+            // एरर मेसेज सुधारित (Improved error message)
+            return res.status(500).json({ message: 'Database update failed.', error: err.sqlMessage || 'Server error during update.' });
         }
 
         if (result.affectedRows === 0) return res.status(404).json({ message: 'Employee not found or data was the same.' });

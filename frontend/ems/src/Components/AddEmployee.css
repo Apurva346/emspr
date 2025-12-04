@@ -109,3 +109,23 @@
         font-size: 16px;
     }
 }
+
+
+
+/* जेव्हा इनपुट फील्ड रिकामे असेल */
+/* .input-red-border {
+    border: 1px solid red !important; /* लाल बॉर्डर */
+}
+
+/* जेव्हा इनपुट फील्ड भरलेले असेल */
+.input-green-border {
+    border: 1px solid green !important; /* हिरवी बॉर्डर */
+}
+
+.form-control:focus {
+
+    box-shadow: none !important;   
+
+       
+
+} */

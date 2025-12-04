@@ -21,6 +21,20 @@ const AddEmployee = ({ onClose }) => {
     const [profileImage, setProfileImage] = useState(null)
     const [imagePreviewUrl, setImagePreviewUrl] = useState(null)
 
+    
+    const today = new Date();
+
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1); // 👈 येथे बदल केला आहे.
+
+    const year = yesterday.getFullYear();
+
+    const month = String(yesterday.getMonth() + 1).padStart(2, '0'); 
+    const day = String(yesterday.getDate()).padStart(2, '0');
+
+
+    const maxDate = `${year}-${month}-${day}`; 
+
     // ----------------- IMAGE PREVIEW (NO CHANGE) -----------------
     useEffect(() => {
         if (profileImage) {
@@ -117,35 +131,37 @@ const AddEmployee = ({ onClose }) => {
                 <Row>
                     <Col md={6}>
                         <Form.Group className='mb-3'>
-                            <Form.Label className='label'>Name *</Form.Label>
+                            <Form.Label className='label'>
+                              Name<span style={{ color: 'red', marginLeft: '5px' }}>*</span>
+                            </Form.Label>
                             <Form.Control
                                 type="text"
                                 name="name"
                                 value={formData.name}
                                 onChange={handleChange}
                                 required
-                                className='input'
+                                // className={formData.name.trim() === '' ? 'input-red-border' : 'input-green-border'}
                             />
                         </Form.Group>
                     </Col>
 
                     <Col md={6}>
                         <Form.Group className='mb-3'>
-                            <Form.Label className='label'>Email *</Form.Label>
+                            <Form.Label className='label'>Email<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Form.Label>
                             <Form.Control
                                 type="email"
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
                                 required
-                                className='input'
+
                             />
                         </Form.Group>
                     </Col>
 
                     <Col md={6}>
                         <Form.Group className='mb-3'>
-                            <Form.Label className='label'>Phone *</Form.Label>
+                            <Form.Label className='label'>Phone<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Form.Label>
                             <Form.Control
                                 type="tel"
                                 name="phone"
@@ -153,26 +169,29 @@ const AddEmployee = ({ onClose }) => {
                                 onChange={handleChange}
                                 required
                                 className='input'
+                                minLength={10}
                             />
                         </Form.Group>
                     </Col>
 
                     <Col md={6}>
                         <Form.Group className='mb-3'>
-                            <Form.Label className='label'>Birth Date</Form.Label>
+                            <Form.Label className='label'>Birth Date<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Form.Label>
                             <Form.Control
                                 type="date"
                                 name="birth"
                                 value={formData.birth}
                                 onChange={handleChange}
                                 className='input'
+                                required
+                                max={maxDate}
                             />
                         </Form.Group>
                     </Col>
 
                     <Col md={12}>
                         <Form.Group className='mb-3'>
-                            <Form.Label className='label'>Gender *</Form.Label>
+                            <Form.Label className='label'>Gender<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Form.Label>
                             <Form.Select
                                 name="gender"
                                 value={formData.gender}
@@ -198,29 +217,15 @@ const AddEmployee = ({ onClose }) => {
                 <Row>
                     <Col md={6}>
                         <Form.Group className='mb-3'>
-                            <Form.Label className='label'>Department *</Form.Label>
-                            {/* <Form.Select
-                                name="department"
-                                value={formData.department}
-                                onChange={handleChange}
-                                required
-                                className='input'
-                            >
-                                <option value="">Select</option>
-                                <option>IT</option>
-                                <option>HR</option>
-                                <option>Sales</option>
-                                <option>Marketing</option>
-                                <option>Finance</option>
-                            </Form.Select> */}
+                            <Form.Label className='label'>Department<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Form.Label>
+                            
                             <Form.Select
                               as='select'
                               name='department'
                               value={formData.department}
                               onChange={handleChange}
                               required
-                              isInvalid={formData.department === ""}   // 🔴 Red when not selected
-                              isValid={formData.department !== ""}     // ✅ Green when selected
+                              
                             >
                             <option value=''>Select Department</option>
                             <option value='It'>IT</option>
@@ -239,7 +244,7 @@ const AddEmployee = ({ onClose }) => {
 
                     <Col md={6}>
                         <Form.Group className='mb-3'>
-                            <Form.Label className='label'>Position *</Form.Label>
+                            <Form.Label className='label'>Position<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Form.Label>
                             <Form.Control
                                 type="text"
                                 name="position"
@@ -247,13 +252,14 @@ const AddEmployee = ({ onClose }) => {
                                 onChange={handleChange}
                                 required
                                 className='input'
+                                
                             />
                         </Form.Group>
                     </Col>
 
                     <Col md={6}>
                         <Form.Group className='mb-3'>
-                            <Form.Label className='label'>Manager *</Form.Label>
+                            <Form.Label className='label'>Manager<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Form.Label>
                             <Form.Control
                                 type="text"
                                 name="manager"
@@ -261,19 +267,22 @@ const AddEmployee = ({ onClose }) => {
                                 onChange={handleChange}
                                 required
                                 className='input'
+                                
                             />
                         </Form.Group>
                     </Col>
 
                     <Col md={6}>
                         <Form.Group className='mb-3'>
-                            <Form.Label className='label'>Joining Date</Form.Label>
+                            <Form.Label className='label'>Joining Date<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Form.Label>
                             <Form.Control
                                 type="date"
                                 name="joining"
                                 value={formData.joining}
                                 onChange={handleChange}
                                 className='input'
+                                required
+                                
                             />
                         </Form.Group>
                     </Col>
@@ -293,13 +302,14 @@ const AddEmployee = ({ onClose }) => {
 
                     <Col md={6}>
                         <Form.Group className='mb-3'>
-                            <Form.Label className='label'>Status *</Form.Label>
+                            <Form.Label className='label'>Status<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Form.Label>
                             <Form.Select
                                 name="status"
                                 value={formData.status}
                                 onChange={handleChange}
                                 required
                                 className='input'
+                                
                             >
                                 <option value="">Select</option>
                                 <option value="Active">Active</option>
@@ -319,7 +329,7 @@ const AddEmployee = ({ onClose }) => {
                 <Row>
                     <Col md={6}>
                         <Form.Group className='mb-3'>
-                            <Form.Label className='label'>Salary *</Form.Label>
+                            <Form.Label className='label'>Salary<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Form.Label>
                             <Form.Control
                                 type="number"
                                 name="salary"
@@ -327,13 +337,14 @@ const AddEmployee = ({ onClose }) => {
                                 onChange={handleChange}
                                 required
                                 className='input'
+                                
                             />
                         </Form.Group>
                     </Col>
 
                     <Col md={6}>
                         <Form.Group className='mb-3'>
-                            <Form.Label className='label'>Education *</Form.Label>
+                            <Form.Label className='label'>Education<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Form.Label>
                             <Form.Control
                                 type="text"
                                 name="education"
@@ -341,19 +352,21 @@ const AddEmployee = ({ onClose }) => {
                                 onChange={handleChange}
                                 required
                                 className='input'
+                                
                             />
                         </Form.Group>
                     </Col>
 
                     <Col md={6}>
                         <Form.Group className='mb-3'>
-                            <Form.Label className='label'>Mode *</Form.Label>
+                            <Form.Label className='label'>Mode<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Form.Label>
                             <Form.Select
                                 name="working_mode"
                                 value={formData.working_mode}
                                 onChange={handleChange}
                                 required
                                 className='input'
+                                
                             >
                                 <option value="">Select</option>
                                 <option value="on-site">On-site</option>
@@ -365,13 +378,14 @@ const AddEmployee = ({ onClose }) => {
 
                     <Col md={6}>
                         <Form.Group className='mb-3'>
-                            <Form.Label className='label'>Employee Type *</Form.Label>
+                            <Form.Label className='label'>Employee Type<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Form.Label>
                             <Form.Select
                                 name="emp_type"
                                 value={formData.emp_type}
                                 onChange={handleChange}
                                 required
                                 className='input'
+                                
                             >
                                 <option value="">Select</option>
                                 <option value="full time">Full Time</option>
@@ -390,6 +404,7 @@ const AddEmployee = ({ onClose }) => {
                                 value={formData.emer_cont_no}
                                 onChange={handleChange}
                                 className='input'
+                                maxLength={10}
                             />
                         </Form.Group>
                     </Col>
