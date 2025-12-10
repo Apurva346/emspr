@@ -228,7 +228,7 @@ const AddEmployee = ({ onClose }) => {
                               
                             >
                             <option value=''>Select Department</option>
-                            <option value='It'>IT</option>
+                            <option value='IT'>IT</option>
                             <option value='Testing'>Testing</option>
                             <option value='Development'>Development</option>
                             <option value='Marketing'>Marketing</option>
@@ -238,6 +238,9 @@ const AddEmployee = ({ onClose }) => {
                             <option value='Sales'>Sales</option>
                             <option value='Production'>Production</option>
                             <option value='Administration'>Administration</option>
+                            <option value='SNP Tours'>SNP Tours</option>
+                            <option value='SNP Finance'>Snpc Finance</option>
+                            <option value='SNP Capital'>Snpc Finance</option>
                             </Form.Select>
                         </Form.Group>
                     </Col>
@@ -391,6 +394,8 @@ const AddEmployee = ({ onClose }) => {
                                 <option value="full time">Full Time</option>
                                 <option value="part time">Part Time</option>
                                 <option value="intern">Intern</option>
+                                <option value="Night Shift(12Hrs)">Night Shift(12Hrs)</option>
+                                <option value="Day Shift(12Hrs)">Day Shift(12Hrs)</option>
                             </Form.Select>
                         </Form.Group>
                     </Col>
@@ -443,7 +448,7 @@ const AddEmployee = ({ onClose }) => {
                 <hr className='section-line' />
 
                 <Row>
-                    <Col md={8}>
+                    <Col md={4}>
                         <Form.Group className='mb-3'>
                             <Form.Label className='label'>Address</Form.Label>
                             <Form.Control
@@ -456,7 +461,19 @@ const AddEmployee = ({ onClose }) => {
                             />
                         </Form.Group>
                     </Col>
-
+                    <Col md={4}>
+                        <Form.Group className='mb-3'>
+                            <Form.Label className='label'>Additional Information</Form.Label>
+                            <Form.Control
+                                as="textarea"
+                                rows={4}
+                                name="additional_information"
+                                value={formData.additional_information}
+                                onChange={handleChange}
+                                className='input'
+                            />
+                        </Form.Group>
+                    </Col>
                     <Col md={4} className='text-center'>
                         <Form.Group className='mb-3'>
                             <Form.Label className='label'>Profile Picture</Form.Label>
@@ -496,6 +513,8 @@ const AddEmployee = ({ onClose }) => {
                             />
                         )}
                     </Col>
+                    
+
                 </Row>
             </Col>
         </Row>

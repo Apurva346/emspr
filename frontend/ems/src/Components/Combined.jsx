@@ -12,7 +12,7 @@ const Combined = ({
 }) => {
   return (
     <div 
-      className="d-flex justify-content-between align-items-center"
+      className="d-flex justify-content-between align-items-start"
     >
       {/* LEFT SIDE → Status Filter */}
       <div>

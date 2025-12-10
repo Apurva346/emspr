@@ -1,6 +1,3 @@
-fb3205331f4e4141a7f62d9ca4f9f080
-
-
 echo "==== Starting Build and Deployment ===="
 
 SOURCE="$WORKSPACE/"

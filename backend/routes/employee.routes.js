@@ -387,7 +387,7 @@ router.post('/employees', authenticateToken, (req, res) => {
     const {
         name, position, email, phone, gender, joining, leaving,
         department, status, working_mode, emp_type, salary,
-        profile_pic, manager, birth, education, address, emer_cont_no, relation, referred_by
+        profile_pic, manager, birth, education, address, emer_cont_no, relation, referred_by, additional_information
     } = req.body;
 
     // --- ✅ Updated Validation Check (Matching Frontend Requirements) ---
@@ -405,8 +405,8 @@ router.post('/employees', authenticateToken, (req, res) => {
 
     // Note: All fields are still inserted into the database, optional fields will be null/empty string if not provided.
     const query = `INSERT INTO home 
-        (name, position, email, phone, gender, joining, leaving, department, status, working_mode, emp_type, salary, profile_pic, manager, birth, education, address, emer_cont_no, relation, referred_by)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        (name, position, email, phone, gender, joining, leaving, department, status, working_mode, emp_type, salary, profile_pic, manager, birth, education, address, emer_cont_no, relation, referred_by, additional_information)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
     const values = [
         name, 
@@ -428,7 +428,8 @@ router.post('/employees', authenticateToken, (req, res) => {
         address || "", 
         emer_cont_no || '', 
         relation || '', 
-        referred_by || ''
+        referred_by || '',
+        additional_information || ''
     ];
 
     db.query(query, values, (err, result) => {
@@ -507,7 +508,7 @@ router.put('/employees/:id', authenticateToken, (req, res) => {
     const {
         name, position, email, phone, gender, joining, leaving,
         department, status, working_mode, emp_type, salary,
-        profile_pic, manager, birth, education, address, emer_cont_no, relation, referred_by
+        profile_pic, manager, birth, education, address, emer_cont_no, relation, referred_by, additional_information
     } = req.body;
 
     // --- 🌟 डेट व्हॅल्यू स्वच्छ करणे आणि फॉरमॅट करणे (Cleaning and Formatting Date Fields) 🌟 ---
@@ -545,7 +546,7 @@ router.put('/employees/:id', authenticateToken, (req, res) => {
     const query = `UPDATE home SET 
         name=?, position=?, email=?, phone=?, gender=?, joining=?, leaving=?, 
         department=?, status=?, working_mode=?, emp_type=?, salary=?, 
-        profile_pic=?, manager=?, birth=?, education=?, address=?, emer_cont_no=?, relation=?, referred_by=? 
+        profile_pic=?, manager=?, birth=?, education=?, address=?, emer_cont_no=?, relation=?, referred_by=?, additional_information=? 
         WHERE id=?`;
         
     // VALUES ॲरेमध्ये सर्व सुधारित (sanitized) व्हॅल्यूज वापरणे
@@ -556,7 +557,7 @@ router.put('/employees/:id', authenticateToken, (req, res) => {
         department, status, working_mode, emp_type, salary, 
         profile_pic, manager, 
         birthValue,      // ✅ YYYY-MM-DD किंवा null
-        education, address, emer_cont_no, relation, referred_by, id
+        education, address, emer_cont_no, relation, referred_by, additional_information, id
     ];
 
     db.query(query, values, (err, result) => {
