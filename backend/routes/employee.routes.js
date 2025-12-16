@@ -616,7 +616,8 @@ router.get('/sample-csv', (req, res) => {
         address: 'Pune, India',
         emer_cont_no: '9123456789',
         relation: 'Brother',
-        referred_by: 'HR'
+        referred_by: 'HR',
+        additional_information: 'Alternate No. 9874563215'
     }];
 
     const worksheet = xlsx.utils.json_to_sheet(sampleData);
@@ -633,7 +634,7 @@ router.get('/sample-csv', (req, res) => {
 router.get('/employees/export-csv', authenticateToken, (req, res) => {
     const searchTerm = req.query.search || '';
     const statusFilter = req.query.filter || 'All';
-    const selectFields = 'id, name, manager, department, salary, profile_pic, email, phone, position, birth, status, education, joining, leaving, working_mode, emp_type, address, gender, emer_cont_no, relation, referred_by';
+    const selectFields = 'id, name, manager, department, salary, profile_pic, email, phone, position, birth, status, education, joining, leaving, working_mode, emp_type, address, gender, emer_cont_no, relation, referred_by, additional_information';
     
     // Uses the centralized query builder logic
     const { sqlQuery, queryParams } = buildEmployeeQuery(searchTerm, statusFilter, selectFields);
@@ -742,7 +743,7 @@ router.post('/employees/import', authenticateToken, csvUpload.single('employeesF
                 safe(row.joining), dateOfLeaving, safe(row.department), safe(row.status),
                 safe(row.working_mode), safe(row.emp_type), safe(row.salary), profilePic,
                 safe(row.manager), safe(row.birth), safe(row.education), safe(row.address),
-                safe(row.emer_cont_no), safe(row.relation), safe(row.referred_by)
+                safe(row.emer_cont_no), safe(row.relation), safe(row.referred_by), additional_information
             ]);
         })
         .on('end', () => {
