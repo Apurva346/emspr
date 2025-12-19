@@ -30,7 +30,7 @@ export default function Login() {
     console.log("VITE_API_BASE_URL is:", import.meta.env.VITE_API_BASE_URL); 
 
     try {
-      const response = await axiosInstance.post("/api/login", { username, password });
+      const response = await axiosInstance.post("/login", { username, password });
       
       const token = response.data.token;
       localStorage.setItem("token", token);
