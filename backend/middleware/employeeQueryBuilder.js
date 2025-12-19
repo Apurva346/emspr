@@ -34,3 +34,5 @@ const buildEmployeeQuery = (searchTerm, statusFilter, selectClause) => {
 module.exports = {
     buildEmployeeQuery
 };
+
+

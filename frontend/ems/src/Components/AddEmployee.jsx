@@ -239,8 +239,8 @@ const AddEmployee = ({ onClose }) => {
                             <option value='Production'>Production</option>
                             <option value='Administration'>Administration</option>
                             <option value='SNP Tours'>SNP Tours</option>
-                            <option value='SNP Finance'>Snpc Finance</option>
-                            <option value='SNP Capital'>Snpc Finance</option>
+                            <option value='SNP Finance'>SNP Finance</option>
+                            <option value='SNP Capital'>SNP Capital</option>
                             </Form.Select>
                         </Form.Group>
                     </Col>

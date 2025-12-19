@@ -115,10 +115,11 @@ const Navbar = ({
     // ⭐ FIX: searchTerm आणि statusFilter हे undefined असल्यास, 
     // त्यांना डिफॉल्ट व्हॅल्यू द्या.
     const currentSearchTerm = searchTerm || '';
-    const currentStatusFilter = statusFilter || 'All'; 
+    // const currentStatusFilter = statusFilter || 'All'; 
+    const currentStatusFilter = statusFilter && statusFilter !== 'All' ? statusFilter.toLowerCase() : 'all';
 
     try {
-      const exportUrl = `/employees/export-csv?search=${currentSearchTerm}&filter=${currentStatusFilter}`
+      const exportUrl = `/employees/export-csv?search=${currentSearchTerm}&status=${currentStatusFilter}`
       const response = await axiosInstance.get(exportUrl, { responseType: 'blob' })
       const blob = new Blob([response.data], { type: 'text/csv' })
       const url = window.URL.createObjectURL(blob)
@@ -265,3 +266,5 @@ const Navbar = ({
 }
 
 export default Navbar
+
+

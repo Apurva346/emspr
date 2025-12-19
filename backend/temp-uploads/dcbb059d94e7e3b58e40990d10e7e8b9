@@ -1,0 +1,3 @@
+name,position,email,phone,gender,joining,department,status,working_mode,emp_type,salary,profile_pic,manager,birth,education,address,emer_cont_no,relation,referred_by,additional_information
+Apu,Software Engineer,john.doe@example.com,1234567890,Male,2023-01-15,IT,Active,Remote,Full-time,80000,http://example.com/pic1.jpg,Jane Smith,1990-05-20,B.Tech,123 Main St,9876543210,Friend,Referral_A,Hello1
+Apoo,HR Manager,jane.smith@example.com,0987654321,Female,2022-03-20,HR,Active,On-site,Full-time,75000,http://example.com/pic2.jpg,Robert Brown,1985-11-10,MBA,456 Oak Ave,1234567890,Relative,Referral_B,Hello2
