@@ -21,6 +21,34 @@ export default function Login() {
     setTimeout(() => setInfoMessage(null), 3000); 
   }
 
+  //handleSubmit for local
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
+  //   setErrors("");
+  //   setSuccess("");
+  //   setInfoMessage(null); 
+
+  //   console.log("VITE_API_BASE_URL is:", import.meta.env.VITE_API_BASE_URL); 
+
+  //   try {
+  //     const response = await axiosInstance.post("/login", { username, password });
+      
+  //     const token = response.data.token;
+  //     localStorage.setItem("token", token);
+
+  //     setSuccess("Login successful!");
+  //     navigate("/home");
+  //   } catch (err) {
+  //     if (err.response) {
+  //       setErrors(err.response.data.message);
+  //     } else {
+  //       setErrors("An unexpected error occurred. Please try again later.");
+  //     }
+  //   }
+  // };
+
+  //handleSubmit for server
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setErrors("");
@@ -30,7 +58,7 @@ export default function Login() {
     console.log("VITE_API_BASE_URL is:", import.meta.env.VITE_API_BASE_URL); 
 
     try {
-      const response = await axiosInstance.post("/login", { username, password });
+      const response = await axiosInstance.post("/api/login", { username, password });
       
       const token = response.data.token;
       localStorage.setItem("token", token);
@@ -45,7 +73,6 @@ export default function Login() {
       }
     }
   };
-
 
   return (
     // 🌟 मूळ ग्रेडियंट बॅकग्राउंड आणि सेंटर ॲलाइनमेंट (Center Alignment)
