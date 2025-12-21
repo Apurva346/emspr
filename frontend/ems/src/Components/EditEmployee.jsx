@@ -119,7 +119,7 @@ const EditEmployee = ({ employeeData, onClose }) => {
                                         value={formData.name || ""}
                                         onChange={handleChange}
                                         required
-                                        className="input"
+                                        className="input text-capitalize"
                                     />
                                 </Form.Group>
                             </Col>
@@ -173,7 +173,7 @@ const EditEmployee = ({ employeeData, onClose }) => {
                                         value={formData.gender || ""}
                                         onChange={handleChange}
                                         required
-                                        className="input"
+                                        className="input text-capitalize"
                                     >
                                         <option value="">Select</option>
                                         <option value="male">Male</option>
@@ -199,7 +199,7 @@ const EditEmployee = ({ employeeData, onClose }) => {
                                         value={formData.department || ""}
                                         onChange={handleChange}
                                         required
-                                        className="input"
+                                        className="input text-capitalize"
                                     >
                                         <option value=''>Select Department</option>
                                         <option value='IT'>IT</option>
@@ -228,7 +228,7 @@ const EditEmployee = ({ employeeData, onClose }) => {
                                         value={formData.position || ""}
                                         onChange={handleChange}
                                         required
-                                        className="input"
+                                        className="input text-capitalize"
                                     />
                                 </Form.Group>
                             </Col>
@@ -242,7 +242,7 @@ const EditEmployee = ({ employeeData, onClose }) => {
                                         value={formData.manager || ""}
                                         onChange={handleChange}
                                         required
-                                        className="input"
+                                        className="input text-capitalize"
                                     />
                                 </Form.Group>
                             </Col>
@@ -281,7 +281,7 @@ const EditEmployee = ({ employeeData, onClose }) => {
                                         value={formData.status || ""}
                                         onChange={handleChange}
                                         required
-                                        className="input"
+                                        className="input text-capitalize"
                                     >
                                         <option value="">Select</option>
                                         <option value="active">Active</option>
@@ -322,7 +322,7 @@ const EditEmployee = ({ employeeData, onClose }) => {
                                         value={formData.education || ""}
                                         onChange={handleChange}
                                         required
-                                        className="input"
+                                        className="input text-capitalize"
                                     />
                                 </Form.Group>
                             </Col>
@@ -335,7 +335,7 @@ const EditEmployee = ({ employeeData, onClose }) => {
                                         value={formData.working_mode || ""}
                                         onChange={handleChange}
                                         required
-                                        className="input"
+                                        className="input text-capitalize"
                                     >
                                         <option value="">Select</option>
                                         <option value="on-site">On-site</option>
@@ -353,7 +353,7 @@ const EditEmployee = ({ employeeData, onClose }) => {
                                         value={formData.emp_type || ""} // Now compares to hyphenated value
                                         onChange={handleChange}
                                         required
-                                        className="input"
+                                        className="input text-capitalize"
                                     >
                                         <option value="">Type</option>
                                         <option value="full-time">Full time</option> // UPDATED VALUE
@@ -386,7 +386,7 @@ const EditEmployee = ({ employeeData, onClose }) => {
                                         name="relation"
                                         value={formData.relation || ""}
                                         onChange={handleChange}
-                                        className="input"
+                                        className="input text-capitalize"
                                     />
                                 </Form.Group>
                             </Col>
@@ -399,7 +399,7 @@ const EditEmployee = ({ employeeData, onClose }) => {
                                         name="referred_by"
                                         value={formData.referred_by || ""}
                                         onChange={handleChange}
-                                        className="input"
+                                        className="input text-capitalize"
                                     />
                                 </Form.Group>
                             </Col>
@@ -421,7 +421,7 @@ const EditEmployee = ({ employeeData, onClose }) => {
                                         name="address"
                                         value={formData.address || ""}
                                         onChange={handleChange}
-                                        className="input"
+                                        className="input text-capitalize"
                                     />
                                 </Form.Group>
                             </Col>
@@ -434,7 +434,7 @@ const EditEmployee = ({ employeeData, onClose }) => {
                                         name="additional_information"
                                         value={formData.additional_information || ""}
                                         onChange={handleChange}
-                                        className="input"
+                                        className="input text-capitalize"
                                     />
                                 </Form.Group>
                             </Col>

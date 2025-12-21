@@ -716,3 +716,8 @@ body {
     padding: 0; /* महत्त्वाची सेटिंग */
     /* ... तुमच्या इतर body स्टाईल्स ... */
 }
+
+
+.capitalize-text {
+    text-transform: capitalize;
+}

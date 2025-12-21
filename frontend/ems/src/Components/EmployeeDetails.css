@@ -17,3 +17,8 @@
     align-items: center;
     border: 1px solid #eee;
 }
+
+
+.capitalize-text {
+    text-transform: capitalize;
+}

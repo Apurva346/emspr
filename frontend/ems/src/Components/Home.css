@@ -10,3 +10,6 @@
     border-radius: 12px;
 }
 
+.capitalize-text {
+    text-transform: capitalize;
+}
