@@ -278,12 +278,39 @@ router.get('/sample-csv', (req, res) => {
 
 // ==================== EXPORT CSV (Protected) ====================
 // Exports filtered/searched employee data as a CSV file
+// router.get('/employees/export-csv', authenticateToken, (req, res) => {
+//     const searchTerm = req.query.search || '';
+//     const statusFilter = req.query.status || 'All';
+//     const selectFields = 'id, name, manager, department, salary, profile_pic, email, phone, position, birth, status, education, joining, leaving, working_mode, emp_type, address, gender, emer_cont_no, relation, referred_by, additional_information';
+    
+//     // Uses the centralized query builder logic
+//     const { sqlQuery, queryParams } = buildEmployeeQuery(searchTerm, statusFilter, selectFields);
+
+//     db.query(sqlQuery, queryParams, (err, results) => {
+//         if (err) {
+//             console.error("❌ CSV Export DB Error:", err);
+//             return res.status(500).json({ message: 'Internal server error during export.' });
+//         }
+//         if (results.length === 0) return res.status(404).json({ message: 'No employees found to export.' });
+
+//         const worksheet = xlsx.utils.json_to_sheet(results);
+//         const csvData = xlsx.utils.sheet_to_csv(worksheet);
+        
+//         res.setHeader('Content-Type', 'text/csv');
+//         res.setHeader('Content-Disposition', 'attachment; filename=employees.csv');
+//         res.status(200).send(csvData);
+//     });
+// });
+
+
 router.get('/employees/export-csv', authenticateToken, (req, res) => {
+    // ⭐ MAVAICHA BADAL: Frontend kadun 'filter' parameter yet aahe, 'status' nahi.
     const searchTerm = req.query.search || '';
-    const statusFilter = req.query.filter || 'All';
+    const statusFilter = req.query.filter || 'All'; // Ithe 'filter' kara
+
     const selectFields = 'id, name, manager, department, salary, profile_pic, email, phone, position, birth, status, education, joining, leaving, working_mode, emp_type, address, gender, emer_cont_no, relation, referred_by, additional_information';
     
-    // Uses the centralized query builder logic
+    // Centralized query builder vaprun filtered data milva
     const { sqlQuery, queryParams } = buildEmployeeQuery(searchTerm, statusFilter, selectFields);
 
     db.query(sqlQuery, queryParams, (err, results) => {
@@ -291,13 +318,20 @@ router.get('/employees/export-csv', authenticateToken, (req, res) => {
             console.error("❌ CSV Export DB Error:", err);
             return res.status(500).json({ message: 'Internal server error during export.' });
         }
-        if (results.length === 0) return res.status(404).json({ message: 'No employees found to export.' });
+        
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'No employees found to export.' });
+        }
 
         const worksheet = xlsx.utils.json_to_sheet(results);
         const csvData = xlsx.utils.sheet_to_csv(worksheet);
         
+        // Filename backend kadun set karne (Browser fallback mhunun garjeche aahe)
+        let downloadName = `employees_${statusFilter.toLowerCase()}`;
+        if (searchTerm) downloadName = `employees_${searchTerm.replace(/\s+/g, '_')}`;
+
         res.setHeader('Content-Type', 'text/csv');
-        res.setHeader('Content-Disposition', 'attachment; filename=employees.csv');
+        res.setHeader('Content-Disposition', `attachment; filename=${downloadName}.csv`);
         res.status(200).send(csvData);
     });
 });

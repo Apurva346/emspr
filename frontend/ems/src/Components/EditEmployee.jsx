@@ -202,7 +202,7 @@ const EditEmployee = ({ employeeData, onClose }) => {
                                         className="input text-capitalize"
                                     >
                                         <option value=''>Select Department</option>
-                                        <option value='IT'>IT</option>
+                                        <option value='it'>IT</option>
                                         <option value='testing'>Testing</option>
                                         <option value='development'>Development</option>
                                         <option value='marketing'>Marketing</option>
@@ -212,9 +212,9 @@ const EditEmployee = ({ employeeData, onClose }) => {
                                         <option value='sales'>Sales</option>
                                         <option value='production'>Production</option>
                                         <option value='administration'>Administration</option>
-                                        <option value='SNP Tours'>SNP Tours</option>
-                                        <option value='SNP Finance'>SNP Finance</option>
-                                        <option value='SNP Capital'>SNP Capital</option>
+                                        <option value='snp-tours'>SNP Tours</option>
+                                        <option value='snp-finance'>SNP Finance</option>
+                                        <option value='snp-capital'>SNP Capital</option>
                                     </Form.Select>
                                 </Form.Group>
                             </Col>
@@ -359,8 +359,8 @@ const EditEmployee = ({ employeeData, onClose }) => {
                                         <option value="full-time">Full time</option> // UPDATED VALUE
                                         <option value="part-time">Part time</option> //  UPDATED VALUE
                                         <option value="intern">Intern</option>
-                                        <option value="Night Shift(12Hrs)">Night Shift(12Hrs)</option>
-                                        <option value="Day Shift(12Hrs)">Day Shift(12Hrs)</option>
+                                        <option value="night-shift(12hrs)">Night Shift(12Hrs)</option>
+                                        <option value="day-shift(12hrs)">Day Shift(12Hrs)</option>
                                     </Form.Select>
                                 </Form.Group>
                             </Col>

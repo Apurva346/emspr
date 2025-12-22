@@ -50,12 +50,12 @@ const EmployeeDetails = ({ employee, onClose }) => {
                     {/* LEFT */}
                     <div className="col-sm-4 mb-3">
                         <div className="detail-box"><strong>ID:</strong> {formatId(employee.id)}</div>
-                        <div className="detail-box"><strong>Name:</strong> {employee.name}</div>
-                        <div className="detail-box"><strong>Department:</strong> {employee.department}</div>
-                        <div className="detail-box"><strong>Manager:</strong> {employee.manager}</div>
-                        <div className="detail-box"><strong>Position:</strong> {employee.position}</div>
-                        <div className="detail-box"><strong>Gender:</strong> {employee.gender}</div>
-                        <div className="detail-box"><strong>Referred By:</strong> {employee.referred_by}</div>
+                        <div className="detail-box capitalize-text"><strong>Name:</strong> {employee.name}</div>
+                        <div className="detail-box capitalize-text"><strong>Department:</strong> {employee.department}</div>
+                        <div className="detail-box capitalize-text"><strong>Manager:</strong> {employee.manager}</div>
+                        <div className="detail-box capitalize-text"><strong>Position:</strong> {employee.position}</div>
+                        <div className="detail-box capitalize-text"><strong>Gender:</strong> {employee.gender}</div>
+                        <div className="detail-box capitalize-text"><strong>Referred By:</strong> {employee.referred_by}</div>
                     </div>
 
                     {/* MIDDLE */}
@@ -63,20 +63,20 @@ const EmployeeDetails = ({ employee, onClose }) => {
                         <div className="detail-box"><strong>Email:</strong> {employee.email}</div>
                         <div className="detail-box"><strong>Salary:</strong> {formatSalary(employee.salary)}</div>
                         <div className="detail-box"><strong>Joining Date:</strong> {formatDate(employee.joining)}</div>
-                        <div className="detail-box"><strong>Address:</strong> {employee.address}</div>
-                        <div className="detail-box"><strong>Status:</strong> {employee.status}</div>
+                        <div className="detail-box capitalize-text"><strong>Address:</strong> {employee.address}</div>
+                        <div className="detail-box capitalize-text"><strong>Status:</strong> {employee.status}</div>
                         <div className="detail-box"><strong>Emergency Contact:</strong> {employee.emer_cont_no}</div>
-                        <div className="detail-box"><strong>Additional Information:</strong> {employee.additional_information}</div>
+                        <div className="detail-box capitalize-text"><strong>Additional Information:</strong> {employee.additional_information}</div>
                     </div>
 
                     {/* RIGHT */}
                     <div className="col-sm-4 mb-3">
-                        <div className="detail-box"><strong>Education:</strong> {employee.education}</div>
-                        <div className="detail-box"><strong>Working Mode:</strong> {employee.working_mode}</div>
+                        <div className="detail-box capitalize-text"><strong>Education:</strong> {employee.education}</div>
+                        <div className="detail-box capitalize-text"><strong>Working Mode:</strong> {employee.working_mode}</div>
                         <div className="detail-box"><strong>Date of Birth:</strong> {formatDate(employee.birth)}</div>
                         <div className="detail-box"><strong>Phone:</strong> {employee.phone}</div>
-                        <div className="detail-box"><strong>Employee Type:</strong> {employee.emp_type}</div>
-                        <div className="detail-box"><strong>Relation:</strong> {employee.relation}</div>
+                        <div className="detail-box capitalize-text"><strong>Employee Type:</strong> {employee.emp_type}</div>
+                        <div className="detail-box capitalize-text"><strong>Relation:</strong> {employee.relation}</div>
                         <div className="detail-box">
                             <strong>Date of Leaving:</strong> {employee.leaving === 'N/A' ? 'Still Working' : formatDate(employee.leaving)}
                         </div>

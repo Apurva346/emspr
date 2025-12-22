@@ -144,14 +144,14 @@ export default function Login() {
               Login
             </button>
 
-            <button
+            {/* <button
               type='button'
               className='btn btn-link mb-2'
               style={{ textDecoration: 'none' }}
               onClick={handleForgotPassword} 
             >
               Forgot Password?
-            </button>
+            </button> */}
           </div>
         </form>
       </div>

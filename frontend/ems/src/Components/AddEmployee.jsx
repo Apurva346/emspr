@@ -130,8 +130,8 @@ const AddEmployee = ({ onClose }) => {
 
                 <Row>
                     <Col md={6}>
-                        <Form.Group className='mb-3'>
-                            <Form.Label className='label'>
+                        <Form.Group className='mb-3 capitalize-text'>
+                            <Form.Label className='label capitalize-text'>
                               Name<span style={{ color: 'red', marginLeft: '5px' }}>*</span>
                             </Form.Label>
                             <Form.Control
@@ -139,7 +139,7 @@ const AddEmployee = ({ onClose }) => {
                                 name="name"
                                 value={formData.name}
                                 onChange={handleChange}
-                                required
+                                required className='capitalize-text input'
                                 // className={formData.name.trim() === '' ? 'input-red-border' : 'input-green-border'}
                             />
                         </Form.Group>
@@ -197,12 +197,12 @@ const AddEmployee = ({ onClose }) => {
                                 value={formData.gender}
                                 onChange={handleChange}
                                 required
-                                className='input'
+                                className='input capitalize-text'
                             >
                                 <option value="">Select</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
                             </Form.Select>
                         </Form.Group>
                     </Col>
@@ -225,7 +225,7 @@ const AddEmployee = ({ onClose }) => {
                               value={formData.department}
                               onChange={handleChange}
                               required
-                              
+                              className='capitalize-text input'
                             >
                             <option value=''>Select Department</option>
                             <option value='IT'>IT</option>
@@ -238,9 +238,9 @@ const AddEmployee = ({ onClose }) => {
                             <option value='Sales'>Sales</option>
                             <option value='Production'>Production</option>
                             <option value='Administration'>Administration</option>
-                            <option value='SNP Tours'>SNP Tours</option>
-                            <option value='SNP Finance'>SNP Finance</option>
-                            <option value='SNP Capital'>SNP Capital</option>
+                            <option value='snp-tours'>SNP Tours</option>
+                            <option value='snp-finance'>SNP Finance</option>
+                            <option value='snp-capital'>SNP Capital</option>
                             </Form.Select>
                         </Form.Group>
                     </Col>
@@ -269,7 +269,7 @@ const AddEmployee = ({ onClose }) => {
                                 value={formData.manager}
                                 onChange={handleChange}
                                 required
-                                className='input'
+                                className='input capitalize-text'
                                 
                             />
                         </Form.Group>
@@ -311,7 +311,7 @@ const AddEmployee = ({ onClose }) => {
                                 value={formData.status}
                                 onChange={handleChange}
                                 required
-                                className='input'
+                                className='input capitalize-text'
                                 
                             >
                                 <option value="">Select</option>
@@ -368,13 +368,13 @@ const AddEmployee = ({ onClose }) => {
                                 value={formData.working_mode}
                                 onChange={handleChange}
                                 required
-                                className='input'
+                                className='input capitalize-text'
                                 
                             >
                                 <option value="">Select</option>
-                                <option value="on-site">On-site</option>
-                                <option value="remote">Remote</option>
-                                <option value="hybrid">Hybrid</option>
+                                <option value="On-Site">On-site</option>
+                                <option value="Remote">Remote</option>
+                                <option value="Hybrid">Hybrid</option>
                             </Form.Select>
                         </Form.Group>
                     </Col>
@@ -387,13 +387,13 @@ const AddEmployee = ({ onClose }) => {
                                 value={formData.emp_type}
                                 onChange={handleChange}
                                 required
-                                className='input'
+                                className='input capitalize-text'
                                 
                             >
                                 <option value="">Select</option>
-                                <option value="full time">Full Time</option>
-                                <option value="part time">Part Time</option>
-                                <option value="intern">Intern</option>
+                                <option value="Full Time">Full Time</option>
+                                <option value="Part Time">Part Time</option>
+                                <option value="Intern">Intern</option>
                                 <option value="Night Shift(12Hrs)">Night Shift(12Hrs)</option>
                                 <option value="Day Shift(12Hrs)">Day Shift(12Hrs)</option>
                             </Form.Select>

@@ -231,9 +231,18 @@ const Home = ({ loading, setTotalEmployees }) => {
                 onAddEmployee={() => setShowAddModal(true)}
             />
 
-            <Combined
+            {/* <Combined
                 currentStatus={statusFilter}
                 onStatusChange={setStatusFilter}
+            /> */}
+   
+            <Combined
+              currentStatus={statusFilter}
+             onStatusChange={setStatusFilter}
+             searchTerm={searchTerm} // ⭐ HE LINE ADD KARA, yach mule search value Navbar la milel
+             statusFilter={statusFilter}
+             fetchEmployees={fetchEmployees}
+             fetchEmployeesWithSearch={fetchEmployees}
             />
 
             {/* ⭐ MULTIPLE DELETE BUTTON */}
@@ -272,11 +281,11 @@ const Home = ({ loading, setTotalEmployees }) => {
                         {currentEmployees.map(employee => (
                             <tr key={employee.id}>
                                 <td>{formatId(employee.id)}</td>
-                                <td>{employee.name}</td>
-                                <td>{employee.manager}</td>
-                                <td>{employee.department}</td>
+                                <td className="capitalize-text">{employee.name}</td>
+                                <td className="capitalize-text">{employee.manager}</td>
+                                <td className="capitalize-text">{employee.department}</td>
                                 <td>{employee.salary}</td>
-                                <td>{employee.status}</td>
+                                <td className="capitalize-text">{employee.status}</td>
 
                                 <td>
                                     <div className="d-flex justify-content-center gap-2">
