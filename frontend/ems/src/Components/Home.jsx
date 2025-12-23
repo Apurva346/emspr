@@ -12,19 +12,75 @@ import AddEmployee from './AddEmployee';
 import EditEmployee from './EditEmployee';
 import './Home.css';
 
-// Sorting Helper Function (Optimization: moved outside component)
+// Sorting Helper Function
+// const sortData = (data, column, order) => {
+//     return [...data].sort((a, b) => {
+//         // Manager column sathi data check kara
+//         let aVal = a[column];
+//         let bVal = b[column];
+
+//         // Jar values null astil tar empty string dya
+//         aVal = aVal === null || aVal === undefined ? "" : String(aVal).trim();
+//         bVal = bVal === null || bVal === undefined ? "" : String(bVal).trim();
+
+//         let comparison = 0;
+
+//         if (column === 'salary' || column === 'id') {
+//             comparison = (Number(aVal) || 0) - (Number(bVal) || 0);
+//         } else {
+//             // Alphabetical sorting (Raj vs Robert)
+//             // localeCompare 'Ra' la 'Ro' chya aadhi treat karel
+//             comparison = aVal.localeCompare(bVal, undefined, { 
+//                 sensitivity: 'base',
+//                 numeric: true 
+//             });
+//         }
+
+//         return order === 'asc' ? comparison : -comparison;
+//     });
+// };
+
+// const sortData = (data, column, order) => {
+//     return [...data].sort((a, b) => {
+//         // Values ghetaana trim kara aani lowercase kara
+//         let aVal = a[column] ? String(a[column]).trim().toLowerCase() : "";
+//         let bVal = b[column] ? String(b[column]).trim().toLowerCase() : "";
+
+//         if (column === 'salary' || column === 'id') {
+//             return order === 'asc' 
+//                 ? (Number(a[column]) || 0) - (Number(b[column]) || 0)
+//                 : (Number(b[column]) || 0) - (Number(a[column]) || 0);
+//         }
+
+//         // String Comparison (A to Z)
+//         if (aVal < bVal) {
+//             return order === 'asc' ? -1 : 1;
+//         }
+//         if (aVal > bVal) {
+//             return order === 'asc' ? 1 : -1;
+//         }
+//         return 0;
+//     });
+// };
+
 const sortData = (data, column, order) => {
     return [...data].sort((a, b) => {
-        const aVal = a[column];
-        const bVal = b[column];
+        // ۱. डेटा 'Clean' करा (Spaces aani Hidden characters kadha)
+        let valA = a[column] ? String(a[column]).replace(/^\s+|\s+$/g, '').toLowerCase() : "";
+        let valB = b[column] ? String(b[column]).replace(/^\s+|\s+$/g, '').toLowerCase() : "";
 
-        let comparison = 0;
-
+        // २. Number sorting (Salary/ID)
         if (column === 'salary' || column === 'id') {
-            comparison = (Number(aVal) || 0) - (Number(bVal) || 0);
-        } else {
-            comparison = String(aVal).localeCompare(String(bVal), undefined, { sensitivity: 'base' });
+            const numA = parseFloat(valA) || 0;
+            const numB = parseFloat(valB) || 0;
+            return order === 'asc' ? numA - numB : numB - numA;
         }
+
+        // ۳. Manager (Raj vs Robert) Strict Comparison
+        // Jar valA lahan asel (e.g., 'ra' < 'ro'), tar comparison -1 asava
+        let comparison = 0;
+        if (valA < valB) comparison = -1;
+        if (valA > valB) comparison = 1;
 
         return order === 'asc' ? comparison : -comparison;
     });
@@ -32,10 +88,7 @@ const sortData = (data, column, order) => {
 
 const Home = ({ loading, setTotalEmployees }) => { 
     
-    // --- STATE VARIABLES ---
-    // ⭐ PAGING CHANGE: employeesPerPage state जोडणे
     const [employeesPerPage, setEmployeesPerPage] = useState(10); 
-    
     const [currentPage, setCurrentPage] = useState(1);
     const [employees, setEmployees] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -48,19 +101,14 @@ const Home = ({ loading, setTotalEmployees }) => {
 
     const navigate = useNavigate();
 
-    // ⭐ MODALS
     const [showDetailsModal, setShowDetailsModal] = useState(false);
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedEmployee, setSelectedEmployee] = useState(null);
 
-    // ⭐ DELETE MODAL
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [employeeIdToDelete, setEmployeeIdToDelete] = useState(null);
 
-    // --- MAIN LOGIC ---
-
-    // ⭐ TOTAL COUNT LOGIC: एकूण संख्या (Unfiltered Count) अपडेट करण्यासाठी
     const updateTotalCount = useCallback(async () => {
         try {
             const response = await api.get('/employees', {
@@ -76,34 +124,29 @@ const Home = ({ loading, setTotalEmployees }) => {
         }
     }, [setTotalEmployees]);
 
-    // FETCH EMPLOYEES (केवळ टेबलसाठी फिल्टर केलेला डेटा फेच करेल, संख्या अपडेट करणार नाही)
     const fetchEmployees = useCallback(async (term = '', filter = 'All') => {
         try {
             const response = await api.get('/employees', {
                 params: { search: term, filter }
             });
             setEmployees(response.data);
-            //setCurrentPage(1); // Removed as it's set in useEffect for filter changes
         } catch {
             setEmployees([]);
         }
     }, []); 
 
-    // 1. Component Load झाल्यावर फक्त टेबल डेटा फेच करा
     useEffect(() => {
         fetchEmployees(searchTerm, statusFilter);
-        setCurrentPage(1); // Set page to 1 when filter/search changes
+        setCurrentPage(1);
     }, [searchTerm, statusFilter, fetchEmployees]);
 
-    // 2. Component Load झाल्यावर (आणि नंतर CUD ऑपरेशन झाल्यावर) एकूण संख्या अपडेट करा
     useEffect(() => {
         updateTotalCount();
     }, [updateTotalCount]);
 
-    // ⭐ PAGING CHANGE: Page Size बदलल्यावर employeesPerPage state अपडेट करा
     const handlePageSizeChange = (newSize) => {
         setEmployeesPerPage(newSize);
-        setCurrentPage(1); // Size बदलल्यावर पेज 1 वर सेट करा
+        setCurrentPage(1);
     };
 
     const handleSearch = (term) => {
@@ -111,14 +154,27 @@ const Home = ({ loading, setTotalEmployees }) => {
         setCurrentPage(1);
     };
 
+    // const handleSort = (column) => {
+    //     if (column === sortColumn) {
+    //         setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    //     } else {
+    //         setSortColumn(column);
+    //         setSortOrder('asc');
+    //     }
+    //     setCurrentPage(1);
+    // };
+
     const handleSort = (column) => {
-        if (column === sortColumn) {
-            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-        } else {
-            setSortColumn(column);
-            setSortOrder('asc');
-        }
-        setCurrentPage(1);
+    console.log("Sorting Column:", column); // चेक करा इथे 'manager' येतंय का
+    console.log("Current Order:", sortOrder); // चेक करा 'asc' आहे की 'desc'
+
+    if (column === sortColumn) {
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+        setSortColumn(column);
+        setSortOrder('asc');
+    }
+    setCurrentPage(1);
     };
 
     const getSortIcon = (column) => {
@@ -142,6 +198,7 @@ const Home = ({ loading, setTotalEmployees }) => {
         }
     };
 
+    // Note: details modal madhe vaparnyasathi formatId function tech thevle aahe.
     const formatId = (id) => `EMP${String(id).padStart(3, '0')}`;
 
     const onDelete = (id) => {
@@ -158,10 +215,8 @@ const Home = ({ loading, setTotalEmployees }) => {
         }
     };
 
-    // ⭐ CONFIRM DELETE (fetchEmployees आणि updateTotalCount कॉल करणे)
     const confirmDelete = async () => {
         let idsToDelete = [];
-
         if (employeeIdToDelete) {
             idsToDelete = [employeeIdToDelete];
         } else if (selectedEmployeeIds.length > 0) {
@@ -170,16 +225,13 @@ const Home = ({ loading, setTotalEmployees }) => {
             setShowDeleteModal(false);
             return;
         }
-
         try {
             await api.delete('/employees', { data: { ids: idsToDelete } });
             await fetchEmployees(searchTerm, statusFilter); 
             await updateTotalCount(); 
-            
         } catch (error) { 
             console.error("Delete Error:", error);
         }
-
         setShowDeleteModal(false);
         setSelectedEmployeeIds([]);
         setEmployeeIdToDelete(null);
@@ -205,9 +257,14 @@ const Home = ({ loading, setTotalEmployees }) => {
         }
     };
 
-    // --- MEMOIZED DATA FOR PERFORMANCE (useMemo) ---
+    // const sortedEmployees = useMemo(() => {
+    //     return sortData(employees, sortColumn, sortOrder);
+    // }, [employees, sortColumn, sortOrder]);
+
     const sortedEmployees = useMemo(() => {
-        return sortData(employees, sortColumn, sortOrder);
+    const result = sortData(employees, sortColumn, sortOrder);
+    console.log("Current Sorted Data:", result.map(e => e.manager));
+    return result;
     }, [employees, sortColumn, sortOrder]);
 
     const currentEmployees = useMemo(() => {
@@ -215,8 +272,6 @@ const Home = ({ loading, setTotalEmployees }) => {
         const indexOfFirst = indexOfLast - employeesPerPage;
         return sortedEmployees.slice(indexOfFirst, indexOfLast);
     }, [sortedEmployees, currentPage, employeesPerPage]);
-
-    // --- RENDER ---
 
     if (loading) return <div className="text-center mt-4">Loading...</div>;
 
@@ -230,22 +285,15 @@ const Home = ({ loading, setTotalEmployees }) => {
                 onClear={() => setSearchTerm("")}
                 onAddEmployee={() => setShowAddModal(true)}
             />
-
-            {/* <Combined
-                currentStatus={statusFilter}
-                onStatusChange={setStatusFilter}
-            /> */}
-   
             <Combined
               currentStatus={statusFilter}
-             onStatusChange={setStatusFilter}
-             searchTerm={searchTerm} // ⭐ HE LINE ADD KARA, yach mule search value Navbar la milel
-             statusFilter={statusFilter}
-             fetchEmployees={fetchEmployees}
-             fetchEmployeesWithSearch={fetchEmployees}
+              onStatusChange={setStatusFilter}
+              searchTerm={searchTerm} 
+              statusFilter={statusFilter}
+              fetchEmployees={fetchEmployees}
+              fetchEmployeesWithSearch={fetchEmployees}
             />
 
-            {/* ⭐ MULTIPLE DELETE BUTTON */}
             {selectedEmployeeIds.length > 0 && (
                 <div className="d-flex justify-content-start mb-3 mt-3">
                     <Button variant="outline-danger" onClick={onDeleteMultiple}>
@@ -255,12 +303,12 @@ const Home = ({ loading, setTotalEmployees }) => {
                 </div>
             )}
 
-            {/* EMPLOYEE TABLE */}
             <div className="table-responsive">
                 <Table bordered hover>
                     <thead className="table-dark text-center">
                         <tr>
-                            <th onClick={() => handleSort('id')}>ID {getSortIcon('id')}</th>
+                            {/* Label badlun Sr. No. kela aahe */}
+                            <th onClick={() => handleSort('id')}>Sr. No. {getSortIcon('id')}</th>
                             <th onClick={() => handleSort('name')}>Name {getSortIcon('name')}</th>
                             <th onClick={() => handleSort('manager')}>Manager {getSortIcon('manager')}</th>
                             <th onClick={() => handleSort('department')}>Department {getSortIcon('department')}</th>
@@ -278,57 +326,69 @@ const Home = ({ loading, setTotalEmployees }) => {
                     </thead>
 
                     <tbody className="text-center">
-                        {currentEmployees.map(employee => (
-                            <tr key={employee.id}>
-                                <td>{formatId(employee.id)}</td>
-                                <td className="capitalize-text">{employee.name}</td>
-                                <td className="capitalize-text">{employee.manager}</td>
-                                <td className="capitalize-text">{employee.department}</td>
-                                <td>{employee.salary}</td>
-                                <td className="capitalize-text">{employee.status}</td>
+                        {currentEmployees.map((employee, index) => {
+                            // ⭐ Brackets correction aani Serial Number logic
+                            // const serialNumber = (currentPage - 1) * employeesPerPage + (index + 1);
+                            // --- Display Logic sathi Serial Number ---
+                           let serialNumber;
+        
+                           // Jar sorting 'id' (Sr. No.) var aahe aani order 'desc' aahe
+                           if (sortColumn === 'id' && sortOrder === 'desc') {
+                                serialNumber = sortedEmployees.length - ((currentPage - 1) * employeesPerPage + index);
+                            } else {
+                                // Normal 1, 2, 3 logic
+                                  serialNumber = (currentPage - 1) * employeesPerPage + (index + 1);
+                            }
 
-                                <td>
-                                    <div className="d-flex justify-content-center gap-2">
-                                        <Button variant="outline-primary"
-                                            onClick={() => onDetailsClick(employee)}>
-                                            <i className="fas fa-circle-info"></i>
-                                        </Button>
+                            return (
+                                <tr key={employee.id}>
+                                    {/* Sr. No. display logic */}
+                                    <td>{serialNumber}</td>
+                                    <td className="capitalize-text">{employee.name}</td>
+                                    <td className="capitalize-text">{employee.manager}</td>
+                                    <td className="capitalize-text">{employee.department}</td>
+                                    <td>{employee.salary}</td>
+                                    <td className="capitalize-text">{employee.status}</td>
 
-                                        <Button variant="outline-success"
-                                            onClick={() => onEditClick(employee)}>
-                                            <i className="fas fa-edit"></i>
-                                        </Button>
+                                    <td>
+                                        <div className="d-flex justify-content-center gap-2">
+                                            <Button variant="outline-primary" onClick={() => onDetailsClick(employee)}>
+                                                <i className="fas fa-circle-info"></i>
+                                            </Button>
 
-                                        <Button variant="outline-danger"
-                                            onClick={() => onDelete(employee.id)}>
-                                            <i className="fas fa-trash"></i>
-                                        </Button>
-                                    </div>
-                                </td>
+                                            <Button variant="outline-success" onClick={() => onEditClick(employee)}>
+                                                <i className="fas fa-edit"></i>
+                                            </Button>
 
-                                <td>
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedEmployeeIds.includes(employee.id)}
-                                        onChange={() => handleCheckboxChange(employee.id)}
-                                    />
-                                </td>
-                            </tr>
-                        ))}
+                                            <Button variant="outline-danger" onClick={() => onDelete(employee.id)}>
+                                                <i className="fas fa-trash"></i>
+                                            </Button>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedEmployeeIds.includes(employee.id)}
+                                            onChange={() => handleCheckboxChange(employee.id)}
+                                        />
+                                    </td>
+                                </tr>
+                            );
+                        })}
                     </tbody>
                 </Table>
             </div>
 
-            {/* PAGINATION */}
             <CustomPagination
-                pageSize={employeesPerPage} // ⭐ UPDATED STATE
+                pageSize={employeesPerPage}
                 totalCount={sortedEmployees.length}
                 onPageChange={setCurrentPage}
                 currentPage={currentPage}
-                onPageSizeChange={handlePageSizeChange} // ⭐ UPDATED HANDLER
+                onPageSizeChange={handlePageSizeChange}
             />
 
-            {/* DETAILS MODAL */}
+            {/* MODALS (Ya madhe kuthlehi badal kele nahit, EMP ID dakhvne suru rahil) */}
             <Modal show={showDetailsModal} onHide={() => setShowDetailsModal(false)} size="lg" centered dialogClassName='large-modal'>
                 <Modal.Header closeButton>
                     <Modal.Title>Employee Details</Modal.Title>
@@ -338,7 +398,6 @@ const Home = ({ loading, setTotalEmployees }) => {
                 </Modal.Body>
             </Modal>
 
-            {/* ADD EMPLOYEE MODAL */}
             <Modal show={showAddModal} onHide={() => setShowAddModal(false)} size="xl" centered dialogClassName='large-modal'>
                 <Modal.Header closeButton>
                     <Modal.Title>Add Employee</Modal.Title>
@@ -347,7 +406,6 @@ const Home = ({ loading, setTotalEmployees }) => {
                     <AddEmployee 
                         onClose={() => {
                             setShowAddModal(false);
-                            // Refresh table data and constant total count
                             fetchEmployees(searchTerm, statusFilter);
                             updateTotalCount(); 
                         }} 
@@ -355,7 +413,6 @@ const Home = ({ loading, setTotalEmployees }) => {
                 </Modal.Body>
             </Modal>
 
-            {/* EDIT EMPLOYEE MODAL */}
             <Modal show={showEditModal} onHide={() => setShowEditModal(false)} size="xl" centered dialogClassName='large-modal'>
                 <Modal.Header closeButton>
                     <Modal.Title>Edit Employee</Modal.Title>
@@ -365,7 +422,6 @@ const Home = ({ loading, setTotalEmployees }) => {
                         employeeData={selectedEmployee} 
                         onClose={() => {
                             setShowEditModal(false);
-                            // Refresh table data and constant total count
                             fetchEmployees(searchTerm, statusFilter);
                             updateTotalCount(); 
                         }} 
@@ -373,7 +429,6 @@ const Home = ({ loading, setTotalEmployees }) => {
                 </Modal.Body>
             </Modal>
 
-            {/* DELETE MODAL */}
             <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Confirm Delete</Modal.Title>

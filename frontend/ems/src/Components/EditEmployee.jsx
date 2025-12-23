@@ -9,6 +9,11 @@ const normalizeString = (str) => {
     return str.trim().toLowerCase().replace(/\s/g, '-'); // Replaces spaces with hyphens
 };
 
+const formatId = (id) => {
+    if (!id) return 'N/A';
+    return `EMP${String(id).padStart(3, '0')}`;
+};
+
 
 const EditEmployee = ({ employeeData, onClose }) => {
     const [formData, setFormData] = useState({});
@@ -112,6 +117,19 @@ const EditEmployee = ({ employeeData, onClose }) => {
                         <Row>
                             <Col md={6}>
                                 <Form.Group>
+                                    <Form.Label className="label">Employee ID</Form.Label>
+                                    <Form.Control
+                                       type="text"
+                                       name="id"
+                                       value={formatId(formData.id)} 
+                                       readOnly // यामुळे युजरला यात बदल करता येणार नाही
+                                       className="input bg-light" // bg-light मुळे ते फील्ड थोडं राखाडी (gray) दिसेल, जेणेकरून समजेल की ते लॉक आहे
+                                       style={{ cursor: 'not-allowed', fontWeight: 'bold' }} 
+                                    />
+                                </Form.Group>
+                            </Col>
+                            <Col md={6}>
+                                <Form.Group>
                                     <Form.Label className="label">Name<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Form.Label>
                                     <Form.Control
                                         type="text"
@@ -165,7 +183,7 @@ const EditEmployee = ({ employeeData, onClose }) => {
                                 </Form.Group>
                             </Col>
 
-                            <Col md={12}>
+                            <Col md={6}>
                                 <Form.Group>
                                     <Form.Label className="label">Gender<span style={{ color: 'red', marginLeft: '5px' }}>*</span></Form.Label>
                                     <Form.Select

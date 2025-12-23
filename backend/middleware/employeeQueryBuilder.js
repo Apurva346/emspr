@@ -26,7 +26,8 @@ const buildEmployeeQuery = (searchTerm, statusFilter, selectClause) => {
     }
 
     const finalSelect = selectClause || '*';
-    const sqlQuery = `SELECT ${finalSelect} FROM home ${whereClause}`;
+    // const sqlQuery = `SELECT ${finalSelect} FROM home ${whereClause}`;
+    const sqlQuery = `SELECT ${finalSelect} FROM home ${whereClause} ORDER BY id DESC`;
     
     return { sqlQuery, queryParams };
 };
@@ -34,5 +35,6 @@ const buildEmployeeQuery = (searchTerm, statusFilter, selectClause) => {
 module.exports = {
     buildEmployeeQuery
 };
+
 
 

@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../App.css'; // तुमचा कस्टम CSS (App.css)
+import '../App.css';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-// logo import काढला आहे किंवा तो आता वापरला जाणार नाही.
 import axiosInstance from './axiosconfig'; 
 
 
@@ -47,32 +46,6 @@ export default function Login() {
     }
   };
 
-  //handleSubmit for server
-
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
-  //   setErrors("");
-  //   setSuccess("");
-  //   setInfoMessage(null); 
-
-  //   console.log("VITE_API_BASE_URL is:", import.meta.env.VITE_API_BASE_URL); 
-
-  //   try {
-  //     const response = await axiosInstance.post("/api/login", { username, password });
-      
-  //     const token = response.data.token;
-  //     localStorage.setItem("token", token);
-
-  //     setSuccess("Login successful!");
-  //     navigate("/home");
-  //   } catch (err) {
-  //     if (err.response) {
-  //       setErrors(err.response.data.message);
-  //     } else {
-  //       setErrors("An unexpected error occurred. Please try again later.");
-  //     }
-  //   }
-  // };
 
   return (
     // 🌟 मूळ ग्रेडियंट बॅकग्राउंड आणि सेंटर ॲलाइनमेंट (Center Alignment)

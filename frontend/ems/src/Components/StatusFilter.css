@@ -1,0 +1,14 @@
+/* जो फिल्टर सिलेक्ट आहे त्यासाठी हा क्लास */
+.active-filter {
+    border: 2px solid #000 !important; /* काळया रंगाची ठळक बॉर्डर */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3) !important; /* थोडी सावली */
+    transform: translateY(-2px); /* बटन थोडे वर उचलल्यासारखे दिसेल */
+    font-weight: bold !important;
+    opacity: 1 !important;
+}
+
+/* जे सिलेक्ट नाहीत त्यांची ओपॅसिटी थोडी कमी ठेवू जेणेकरून सिलेक्टेड बटन उठून दिसेल */
+.btn-grad, .btn-logout {
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
