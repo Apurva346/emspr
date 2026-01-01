@@ -25,7 +25,7 @@ const AddEmployee = ({ onClose }) => {
     const today = new Date();
 
     const yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 1); // 👈 येथे बदल केला आहे.
+    yesterday.setDate(today.getDate() - 1); 
 
     const year = yesterday.getFullYear();
 
@@ -113,11 +113,6 @@ const AddEmployee = ({ onClose }) => {
 
       <div className='add-employee-wrapper p-4'>
 
-    {/* <h2 className='text-center mb-4 add-emp-title'>
-        <i className="fas fa-user-plus me-2"></i>
-        Add Employee
-    </h2> */}
-
     {message.text && <Alert variant={message.type}>{message.text}</Alert>}
 
     <Form onSubmit={handleSubmit}>
@@ -130,8 +125,8 @@ const AddEmployee = ({ onClose }) => {
 
                 <Row>
                     <Col md={6}>
-                        <Form.Group className='mb-3 capitalize-text'>
-                            <Form.Label className='label capitalize-text'>
+                        <Form.Group className='mb-3'>
+                            <Form.Label className='label'>
                               Name<span style={{ color: 'red', marginLeft: '5px' }}>*</span>
                             </Form.Label>
                             <Form.Control
@@ -228,16 +223,16 @@ const AddEmployee = ({ onClose }) => {
                               className='capitalize-text input'
                             >
                             <option value=''>Select Department</option>
-                            <option value='IT'>IT</option>
-                            <option value='Testing'>Testing</option>
-                            <option value='Development'>Development</option>
-                            <option value='Marketing'>Marketing</option>
-                            <option value='Finance'>Finance</option>
-                            <option value='Operation Management'>Operation Management</option>
-                            <option value='HR'>HR</option>
-                            <option value='Sales'>Sales</option>
-                            <option value='Production'>Production</option>
-                            <option value='Administration'>Administration</option>
+                            <option value='it'>IT</option>
+                            <option value='testing'>Testing</option>
+                            <option value='development'>Development</option>
+                            <option value='marketing'>Marketing</option>
+                            <option value='finance'>Finance</option>
+                            <option value='operation-management'>Operation Management</option>
+                            <option value='hr'>HR</option>
+                            <option value='sales'>Sales</option>
+                            <option value='production'>Production</option>
+                            <option value='administration'>Administration</option>
                             <option value='snp-tours'>SNP Tours</option>
                             <option value='snp-finance'>SNP Finance</option>
                             <option value='snp-capital'>SNP Capital</option>
@@ -269,8 +264,7 @@ const AddEmployee = ({ onClose }) => {
                                 value={formData.manager}
                                 onChange={handleChange}
                                 required
-                                className='input capitalize-text'
-                                
+                                className='input capitalize-text'     
                             />
                         </Form.Group>
                     </Col>
@@ -284,8 +278,7 @@ const AddEmployee = ({ onClose }) => {
                                 value={formData.joining}
                                 onChange={handleChange}
                                 className='input'
-                                required
-                                
+                                required    
                             />
                         </Form.Group>
                     </Col>
@@ -311,13 +304,12 @@ const AddEmployee = ({ onClose }) => {
                                 value={formData.status}
                                 onChange={handleChange}
                                 required
-                                className='input capitalize-text'
-                                
+                                className='input capitalize-text'    
                             >
                                 <option value="">Select</option>
-                                <option value="Active">Active</option>
-                                <option value="Inactive">Inactive</option>
-                                <option value="Blacklist">Blacklist</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="blacklist">Blacklist</option>
                             </Form.Select>
                         </Form.Group>
                     </Col>
@@ -372,9 +364,9 @@ const AddEmployee = ({ onClose }) => {
                                 
                             >
                                 <option value="">Select</option>
-                                <option value="On-Site">On-site</option>
-                                <option value="Remote">Remote</option>
-                                <option value="Hybrid">Hybrid</option>
+                                <option value="on-site">On-site</option>
+                                <option value="remote">Remote</option>
+                                <option value="hybrid">Hybrid</option>
                             </Form.Select>
                         </Form.Group>
                     </Col>
@@ -391,11 +383,11 @@ const AddEmployee = ({ onClose }) => {
                                 
                             >
                                 <option value="">Select</option>
-                                <option value="Full Time">Full Time</option>
-                                <option value="Part Time">Part Time</option>
-                                <option value="Intern">Intern</option>
-                                <option value="Night Shift(12Hrs)">Night Shift(12Hrs)</option>
-                                <option value="Day Shift(12Hrs)">Day Shift(12Hrs)</option>
+                                <option value="full-time">Full Time</option>
+                                <option value="part-time">Part Time</option>
+                                <option value="intern">Intern</option>
+                                <option value="night-shift-12hrs">Night Shift(12Hrs)</option>
+                                <option value="day-shift-12hrs">Day Shift(12Hrs)</option>
                             </Form.Select>
                         </Form.Group>
                     </Col>

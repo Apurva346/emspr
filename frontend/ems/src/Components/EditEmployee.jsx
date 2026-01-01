@@ -3,7 +3,7 @@ import { Form, Button, Row, Col, Alert, Image } from "react-bootstrap";
 import api from "./axiosconfig";
 import "./AddEmployee.css"; // Ensure this CSS file exists and is correctly named
 
-// Helper function for consistent data normalization
+//Helper function for consistent data normalization
 const normalizeString = (str) => {
     if (!str) return "";
     return str.trim().toLowerCase().replace(/\s/g, '-'); // Replaces spaces with hyphens
@@ -25,21 +25,38 @@ const EditEmployee = ({ employeeData, onClose }) => {
     const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
 
     // Load employee data and normalize critical fields
-    useEffect(() => {
-        if (employeeData) {
-            setFormData({
-                ...employeeData,
-                // Normalizing fields to lowercase and replacing spaces with hyphens for consistency
-                department: normalizeString(employeeData.department),
-                status: normalizeString(employeeData.status),
-                working_mode: normalizeString(employeeData.working_mode),
-                emp_type: normalizeString(employeeData.emp_type), // <--- FIX APPLIED HERE
-                gender: normalizeString(employeeData.gender),
-            });
+    // useEffect(() => {
+    //     if (employeeData) {
+    //         setFormData({
+    //             ...employeeData,
+    //             // Normalizing fields to lowercase and replacing spaces with hyphens for consistency
+    //             department: normalizeString(employeeData.department),
+    //             status: normalizeString(employeeData.status),
+    //             working_mode: normalizeString(employeeData.working_mode),
+    //             emp_type: normalizeString(employeeData.emp_type), // <--- FIX APPLIED HERE
+    //             gender: normalizeString(employeeData.gender),
+    //         });
 
-            setImagePreviewUrl(employeeData.profile_pic);
-        }
-    }, [employeeData]);
+    //         setImagePreviewUrl(employeeData.profile_pic);
+    //     }
+    // }, [employeeData]);
+
+    // Load employee data
+useEffect(() => {
+    if (employeeData) {
+        setFormData({
+            ...employeeData,
+            // बॅकएंडकडून येणारे ID इकडे मॅप करा
+            department: employeeData.department_id, 
+            status: employeeData.status_id,
+            working_mode: employeeData.mode_id, // लक्ष द्या: डेटाबेसमध्ये 'mode_id' असेल तर
+            emp_type: employeeData.emp_type_id,
+            gender: normalizeString(employeeData.gender),
+        });
+
+        setImagePreviewUrl(employeeData.profile_pic);
+    }
+}, [employeeData]);
 
 
     // Preview image
@@ -56,47 +73,94 @@ const EditEmployee = ({ employeeData, onClose }) => {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     setLoading(true);
+
+    //     try {
+    //         let profilePicUrl = formData.profile_pic;
+
+    //         if (profileImage) {
+    //             const fd = new FormData();
+    //             fd.append("image", profileImage);
+
+    //             // Note: Ensure the API endpoint '/upload' and logic are correct
+    //             const upload = await api.post("/upload", fd);
+    //             profilePicUrl = upload.data.imageUrl;
+    //         }
+
+    //         // const updated = {
+    //         //     ...formData,
+    //         //     profile_pic: profilePicUrl,
+    //         //     // Ensure data sent to the backend is normalized if necessary
+    //         //     department: normalizeString(formData.department),
+    //         //     status: normalizeString(formData.status),
+    //         //     working_mode: normalizeString(formData.working_mode),
+    //         //     emp_type: normalizeString(formData.emp_type),
+    //         //     gender: normalizeString(formData.gender),
+    //         // };
+    //         const updated = {
+    //         ...formData,
+    //         profile_pic: profilePicUrl,
+    //         // ID कॉलम्स बॅकएंडला हवे तसे पाठवा
+    //         department_id: formData.department,
+    //         status_id: formData.status,
+    //         mode_id: formData.working_mode,
+    //         emp_type_id: formData.emp_type,
+    //         };
+    //         const res = await api.put(`/employees/${formData.id}`, updated);
+
+    //         setMessage({ type: "success", text: res.data.message });
+    //         setTimeout(() => onClose(), 1200);
+
+    //     } catch (error) {
+    //         setMessage({
+    //             type: "danger",
+    //             text: error.response?.data?.message || "Update failed",
+    //         });
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
+    e.preventDefault();
+    setLoading(true);
 
-        try {
-            let profilePicUrl = formData.profile_pic;
+    try {
+        let profilePicUrl = formData.profile_pic;
 
-            if (profileImage) {
-                const fd = new FormData();
-                fd.append("image", profileImage);
-
-                // Note: Ensure the API endpoint '/upload' and logic are correct
-                const upload = await api.post("/upload", fd);
-                profilePicUrl = upload.data.imageUrl;
-            }
-
-            const updated = {
-                ...formData,
-                profile_pic: profilePicUrl,
-                // Ensure data sent to the backend is normalized if necessary
-                department: normalizeString(formData.department),
-                status: normalizeString(formData.status),
-                working_mode: normalizeString(formData.working_mode),
-                emp_type: normalizeString(formData.emp_type),
-                gender: normalizeString(formData.gender),
-            };
-
-            const res = await api.put(`/employees/${formData.id}`, updated);
-
-            setMessage({ type: "success", text: res.data.message });
-            setTimeout(() => onClose(), 1200);
-
-        } catch (error) {
-            setMessage({
-                type: "danger",
-                text: error.response?.data?.message || "Update failed",
-            });
-        } finally {
-            setLoading(false);
+        if (profileImage) {
+            const fd = new FormData();
+            fd.append("image", profileImage);
+            const upload = await api.post("/upload", fd);
+            profilePicUrl = upload.data.imageUrl;
         }
-    };
+
+        const updated = {
+            ...formData,
+            profile_pic: profilePicUrl,
+            // बॅकएंडला हवे असलेले बरोबर कॉलम नेम्स पाठवा
+            department_id: formData.department,
+            status_id: formData.status,
+            mode_id: formData.working_mode,
+            emp_type_id: formData.emp_type,
+            gender: (formData.gender || "").toLowerCase()
+        };
+
+        const res = await api.put(`/employees/${formData.id}`, updated);
+        setMessage({ type: "success", text: res.data.message });
+        setTimeout(() => onClose(), 1200);
+
+    } catch (error) {
+        setMessage({
+            type: "danger",
+            text: error.response?.data?.message || "Update failed",
+        });
+    } finally {
+        setLoading(false);
+    }
+};
 
     return (
         <div className="add-employee-wrapper">
@@ -220,19 +284,19 @@ const EditEmployee = ({ employeeData, onClose }) => {
                                         className="input text-capitalize"
                                     >
                                         <option value=''>Select Department</option>
-                                        <option value='it'>IT</option>
-                                        <option value='testing'>Testing</option>
-                                        <option value='development'>Development</option>
-                                        <option value='marketing'>Marketing</option>
-                                        <option value='finance'>Finance</option>
-                                        <option value='operation-management'>Operation Management</option>
-                                        <option value='hr'>HR</option>
-                                        <option value='sales'>Sales</option>
-                                        <option value='production'>Production</option>
-                                        <option value='administration'>Administration</option>
-                                        <option value='snp-tours'>SNP Tours</option>
-                                        <option value='snp-finance'>SNP Finance</option>
-                                        <option value='snp-capital'>SNP Capital</option>
+                                        <option value='1'>IT</option>
+                                        <option value='2'>Testing</option>
+                                        <option value='3'>Development</option>
+                                        <option value='4'>Marketing</option>
+                                        <option value='5'>Finance</option>
+                                        <option value='6'>Operation Management</option>
+                                        <option value='7'>HR</option>
+                                        <option value='8'>Sales</option>
+                                        <option value='9'>Production</option>
+                                        <option value='10'>Administration</option>
+                                        <option value='11'>SNP Tours</option>
+                                        <option value='12'>SNP Finance</option>
+                                        <option value='13'>SNP Capital</option>
                                     </Form.Select>
                                 </Form.Group>
                             </Col>
@@ -302,9 +366,9 @@ const EditEmployee = ({ employeeData, onClose }) => {
                                         className="input text-capitalize"
                                     >
                                         <option value="">Select</option>
-                                        <option value="active">Active</option>
-                                        <option value="inactive">Inactive</option>
-                                        <option value="blacklist">Blacklist</option>
+                                        <option value="1">Active</option>
+                                        <option value="2">Inactive</option>
+                                        <option value="3">Blacklist</option>
                                     </Form.Select>
                                 </Form.Group>
                             </Col>
@@ -356,9 +420,9 @@ const EditEmployee = ({ employeeData, onClose }) => {
                                         className="input text-capitalize"
                                     >
                                         <option value="">Select</option>
-                                        <option value="on-site">On-site</option>
-                                        <option value="remote">Remote</option>
-                                        <option value="hybrid">Hybrid</option>
+                                        <option value="1">On-site</option>
+                                        <option value="2">Remote</option>
+                                        <option value="3">Hybrid</option>
                                     </Form.Select>
                                 </Form.Group>
                             </Col>
@@ -374,11 +438,11 @@ const EditEmployee = ({ employeeData, onClose }) => {
                                         className="input text-capitalize"
                                     >
                                         <option value="">Type</option>
-                                        <option value="full-time">Full time</option> // UPDATED VALUE
-                                        <option value="part-time">Part time</option> //  UPDATED VALUE
-                                        <option value="intern">Intern</option>
-                                        <option value="night-shift(12hrs)">Night Shift(12Hrs)</option>
-                                        <option value="day-shift(12hrs)">Day Shift(12Hrs)</option>
+                                        <option value="1">Full time</option> // UPDATED VALUE
+                                        <option value="2">Part time</option> //  UPDATED VALUE
+                                        <option value="3">Intern</option>
+                                        <option value="4">Night Shift(12Hrs)</option>
+                                        <option value="5">Day Shift(12Hrs)</option>
                                     </Form.Select>
                                 </Form.Group>
                             </Col>
