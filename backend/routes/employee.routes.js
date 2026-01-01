@@ -214,7 +214,9 @@ router.post('/employees', authenticateToken, async (req, res) => {
         }
 
         // 🔑 Normalize function (VERY IMPORTANT)
-        const normalize = (v) => v?.toLowerCase().trim();
+        // const normalize = (v) => v?.toLowerCase().trim();
+        const normalize = (v) => v?.toLowerCase().trim().replace(/\s+/g, '-');
+
 
         // 🔑 TEXT → ID mapping (NORMALIZED)
         const department_id = await getIdByName('department', normalize(department), db);
