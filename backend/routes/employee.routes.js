@@ -143,6 +143,62 @@ router.post('/upload', authenticateToken, upload.single('image'), (req, res) => 
 // });
 
 //normalization
+// router.post('/employees', authenticateToken, async (req, res) => {
+//     try {
+//         const {
+//             name, position, email, phone, gender, joining, leaving,
+//             department, status, working_mode, emp_type, salary,
+//             profile_pic, manager, birth, education, address,
+//             emer_cont_no, relation, referred_by, additional_information
+//         } = req.body;
+
+//         if (!name || !email || !department || !status || !working_mode || !emp_type) {
+//             return res.status(400).json({ message: 'Required fields missing' });
+//         }
+
+//         // 🔑 TEXT → ID mapping
+//         const department_id = await getIdByName('department', department.toLowerCase(), db);
+//         const status_id  = await getIdByName('status', status.toLowerCase(), db);
+//         const mode_id = await getIdByName('working_mode', working_mode.toLowerCase(), db); // 'working_mode' टेबल नाव
+//         const emp_type_id   = await getIdByName('emp_type', emp_type.toLowerCase(), db);
+
+//         if (!department_id || !status_id || !mode_id || !emp_type_id) {
+//             return res.status(400).json({ message: 'Invalid master data value' });
+//         }
+
+//         const query = `
+//             INSERT INTO home (
+//                 name, position, email, phone, gender, joining, leaving,
+//                 department_id, status_id, mode_id, emp_type_id,
+//                 salary, profile_pic, manager, birth, education,
+//                 address, emer_cont_no, relation, referred_by, additional_information
+//             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+//         `;
+
+//         const values = [
+//             name, position, email, phone, gender,
+//             joining || null, leaving || null,
+//             department_id, status_id, mode_id, emp_type_id,
+//             salary, profile_pic || '', manager || '',
+//             birth || null, education,
+//             address || '', emer_cont_no || '',
+//             relation || '', referred_by || '', additional_information || ''
+//         ];
+
+//         db.query(query, values, (err, result) => {
+//             if (err) {
+//                 console.error(err);
+//                 return res.status(500).json({ message: 'Insert failed' });
+//             }
+//             res.status(201).json({ message: 'Employee added successfully', id: result.insertId });
+//         });
+
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).json({ message: 'Server error' });
+//     }
+// });
+
 router.post('/employees', authenticateToken, async (req, res) => {
     try {
         const {
@@ -152,20 +208,41 @@ router.post('/employees', authenticateToken, async (req, res) => {
             emer_cont_no, relation, referred_by, additional_information
         } = req.body;
 
+        // ✅ Basic validation
         if (!name || !email || !department || !status || !working_mode || !emp_type) {
             return res.status(400).json({ message: 'Required fields missing' });
         }
 
-        // 🔑 TEXT → ID mapping
-        const department_id = await getIdByName('department', department.toLowerCase(), db);
-        const status_id  = await getIdByName('status', status.toLowerCase(), db);
-        const mode_id = await getIdByName('working_mode', working_mode.toLowerCase(), db); // 'working_mode' टेबल नाव
-        const emp_type_id   = await getIdByName('emp_type', emp_type.toLowerCase(), db);
+        // 🔑 Normalize function (VERY IMPORTANT)
+        const normalize = (v) => v?.toLowerCase().trim();
 
+        // 🔑 TEXT → ID mapping (NORMALIZED)
+        const department_id = await getIdByName('department', normalize(department), db);
+        const status_id = await getIdByName('status', normalize(status), db);
+        const mode_id = await getIdByName('working_mode', normalize(working_mode), db);
+        const emp_type_id = await getIdByName('emp_type', normalize(emp_type), db);
+
+        // 🔍 DEBUG LOGS (TEMPORARY)
+        console.log('Incoming values:', {
+            department,
+            status,
+            working_mode,
+            emp_type
+        });
+
+        console.log('Mapped IDs:', {
+            department_id,
+            status_id,
+            mode_id,
+            emp_type_id
+        });
+
+        // ❌ Invalid master data check
         if (!department_id || !status_id || !mode_id || !emp_type_id) {
             return res.status(400).json({ message: 'Invalid master data value' });
         }
 
+        // ✅ Insert query (ONLY _id columns)
         const query = `
             INSERT INTO home (
                 name, position, email, phone, gender, joining, leaving,
@@ -187,17 +264,22 @@ router.post('/employees', authenticateToken, async (req, res) => {
 
         db.query(query, values, (err, result) => {
             if (err) {
-                console.error(err);
+                console.error('❌ Insert error:', err);
                 return res.status(500).json({ message: 'Insert failed' });
             }
-            res.status(201).json({ message: 'Employee added successfully', id: result.insertId });
+
+            res.status(201).json({
+                message: 'Employee added successfully',
+                id: result.insertId
+            });
         });
 
     } catch (err) {
-        console.error(err);
+        console.error('❌ Server error:', err);
         res.status(500).json({ message: 'Server error' });
     }
 });
+
 
 //update
 
