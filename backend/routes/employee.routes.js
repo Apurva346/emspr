@@ -17,6 +17,20 @@ const router = express.Router();
 const db = getDB(); 
 const api_url = process.env.API_URL;
 
+const normalizeDate = (dateStr) => {
+  if (!dateStr) return null;
+
+  // MM/DD/YY or MM/DD/YYYY → YYYY-MM-DD
+  const parts = dateStr.split('/');
+  if (parts.length !== 3) return null;
+
+  let [mm, dd, yy] = parts;
+  if (yy.length === 2) yy = `20${yy}`;
+
+  return `${yy}-${mm.padStart(2, '0')}-${dd.padStart(2, '0')}`;
+};
+
+
 const getIdByName = (table, name, db) => {
     return new Promise((resolve, reject) => {
         db.query(
@@ -708,10 +722,10 @@ router.post(
         // CSV मधून आलेला कच्चा डेटा गोळा करणे
         employeesToInsert.push([
           safe(row.name), safe(row.position), safe(row.email), safe(row.phone),
-          safe(row.gender), safe(row.joining), safe(row.leaving),
+          safe(row.gender), normalizeDate(row.joining), normalizeDate(row.leaving),
           safe(row.department), safe(row.status), safe(row.working_mode), safe(row.emp_type),
           safe(row.salary), safe(row.profile_pic) || '', safe(row.manager),
-          safe(row.birth), safe(row.education), safe(row.address),
+          normalizeDate(row.birth), safe(row.education), safe(row.address),
           safe(row.emer_cont_no), safe(row.relation), safe(row.referred_by),
           safe(row.additional_information)
         ]);
