@@ -90,7 +90,9 @@ router.post('/upload', authenticateToken, upload.single('image'), (req, res) => 
     if (!req.file) return res.status(400).json({ message: 'No image file uploaded.' });
     
     // Construct the full image URL using the environment variable API_URL
-    const imageUrl = `${api_url}/uploads/${req.file.filename}`;
+    // const imageUrl = `${api_url}/uploads/${req.file.filename}`;
+    const imageUrl = `/uploads/${req.file.filename}`;
+
     res.status(200).json({ imageUrl });
 });
 
@@ -157,62 +159,6 @@ router.post('/upload', authenticateToken, upload.single('image'), (req, res) => 
 // });
 
 //normalization
-// router.post('/employees', authenticateToken, async (req, res) => {
-//     try {
-//         const {
-//             name, position, email, phone, gender, joining, leaving,
-//             department, status, working_mode, emp_type, salary,
-//             profile_pic, manager, birth, education, address,
-//             emer_cont_no, relation, referred_by, additional_information
-//         } = req.body;
-
-//         if (!name || !email || !department || !status || !working_mode || !emp_type) {
-//             return res.status(400).json({ message: 'Required fields missing' });
-//         }
-
-//         // 🔑 TEXT → ID mapping
-//         const department_id = await getIdByName('department', department.toLowerCase(), db);
-//         const status_id  = await getIdByName('status', status.toLowerCase(), db);
-//         const mode_id = await getIdByName('working_mode', working_mode.toLowerCase(), db); // 'working_mode' टेबल नाव
-//         const emp_type_id   = await getIdByName('emp_type', emp_type.toLowerCase(), db);
-
-//         if (!department_id || !status_id || !mode_id || !emp_type_id) {
-//             return res.status(400).json({ message: 'Invalid master data value' });
-//         }
-
-//         const query = `
-//             INSERT INTO home (
-//                 name, position, email, phone, gender, joining, leaving,
-//                 department_id, status_id, mode_id, emp_type_id,
-//                 salary, profile_pic, manager, birth, education,
-//                 address, emer_cont_no, relation, referred_by, additional_information
-//             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-//         `;
-
-//         const values = [
-//             name, position, email, phone, gender,
-//             joining || null, leaving || null,
-//             department_id, status_id, mode_id, emp_type_id,
-//             salary, profile_pic || '', manager || '',
-//             birth || null, education,
-//             address || '', emer_cont_no || '',
-//             relation || '', referred_by || '', additional_information || ''
-//         ];
-
-//         db.query(query, values, (err, result) => {
-//             if (err) {
-//                 console.error(err);
-//                 return res.status(500).json({ message: 'Insert failed' });
-//             }
-//             res.status(201).json({ message: 'Employee added successfully', id: result.insertId });
-//         });
-
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).json({ message: 'Server error' });
-//     }
-// });
-
 router.post('/employees', authenticateToken, async (req, res) => {
     try {
         const {
@@ -322,10 +268,10 @@ router.put('/employees/:id', authenticateToken, async (req, res) => {
         const values = [
             name, position, email, phone, (gender || "").toLowerCase(),
             joining || null, leaving || null,
-            department_id,  // थेट ID
-            status_id,      // थेट ID
-            mode_id,        // थेट ID
-            emp_type_id,    // थेट ID
+            Number(department_id),  // थेट ID
+            Number(status_id),      // थेट ID
+            Number(mode_id),        // थेट ID
+            Number(emp_type_id),    // थेट ID
             salary, 
             profile_pic || '', 
             manager || '',

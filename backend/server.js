@@ -32,7 +32,9 @@ const authRoutes = require('./routes/auth.routes');         // Now safe to impor
 // ==================== MIDDLEWARE SETUP ====================
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/uploads', express.static(uploadDir));
+// app.use('/uploads', express.static(uploadDir));
+app.use('/uploads', express.static('uploads'));
+
 
 
 // ==================== TEST ROUTE ====================
