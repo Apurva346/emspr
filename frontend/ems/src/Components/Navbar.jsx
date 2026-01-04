@@ -174,34 +174,19 @@ const Navbar = ({
     <>
       <BootstrapNavbar variant='dark' expand='lg'>
         <Container fluid className='d-flex justify-content-between align-items-center'>
-          
-
           <div className='d-flex gap-2'>
-          
+            <Button className="btn-grad  export-btn" id="btnExport" onClick={handleExportCsv}>Export CSV</Button>
+            <Button className="btn-grad  sample-btn" id="btnSample" onClick={handleDownloadSample}>Sample File</Button>
 
-            <Button className="btn-grad export-btn" id="btnExport" onClick={handleExportCsv}>Export CSV</Button>
-            <Button className="btn-grad sample-btn" id="btnSample" onClick={handleDownloadSample}>Sample File</Button>
+            <input type='file' ref={fileInputRef} accept='.csv' style={{ display: 'none' }} onChange={handleFileSelect}/>
 
-            <input
-              type='file'
-              ref={fileInputRef}
-              accept='.csv'
-              style={{ display: 'none' }}
-              onChange={handleFileSelect}
-            />
-
-            <Button
-              className="btn-grad import-btn"
-              id="btnImport"
-              onClick={() => fileInputRef.current.click()}
-              disabled={loadingImport}
-            >
+            <Button className="btn-grad import-btn" id="btnImport" title="Check Sample File Before Importing!"
+               onClick={() => fileInputRef.current.click()} disabled={loadingImport}>
               {loadingImport ? 'Importing...' : 'Import File'}
             </Button>
           </div>
         </Container>
       </BootstrapNavbar>
-
       <style>{`.custom-modal-width { max-width: 92vw !important; /* Viewport width का 92% */}`}</style>
 
       {/* ===== CSV Preview Modal ===== */}

@@ -64,7 +64,7 @@ const StatusFilter = ({ currentStatus, onStatusChange }) => {
       {/* All Employees Button */}
       <Button 
         id="btnLogout" 
-        className={`btn-logout ${currentStatus === 'All' ? 'active-filter' : ''}`} // <--- Condition
+        className={`btn-logout opa ${currentStatus === 'All' ? 'active-filter' : ''}`} // <--- Condition
         onClick={() => onStatusChange('All')}
         size="sm"
       >
@@ -73,7 +73,7 @@ const StatusFilter = ({ currentStatus, onStatusChange }) => {
 
       {/* Active Employees Button */}
       <Button 
-        className={`btn-grad export-btn ${currentStatus === 'Active' ? 'active-filter' : ''}`} // <--- Condition
+        className={`btn-grad opa export-btn ${currentStatus === 'Active' ? 'active-filter' : ''}`} // <--- Condition
         id="btnExport"
         onClick={() => onStatusChange('Active')}
         size="sm"
@@ -83,7 +83,7 @@ const StatusFilter = ({ currentStatus, onStatusChange }) => {
 
       {/* Inactive Employees Button */}
       <Button 
-        className={`btn-grad sample-btn ${currentStatus === 'Inactive' ? 'active-filter' : ''}`} // <--- Condition
+        className={`btn-grad opa sample-btn ${currentStatus === 'Inactive' ? 'active-filter' : ''}`} // <--- Condition
         id="btnSample"
         onClick={() => onStatusChange('Inactive')}
         size="sm"
@@ -93,7 +93,7 @@ const StatusFilter = ({ currentStatus, onStatusChange }) => {
 
       {/* Blacklist Employees Button */}
       <Button 
-        className={`btn-grad import-btn ${currentStatus === 'Blacklist' ? 'active-filter' : ''}`} // <--- Condition
+        className={`btn-grad opa import-btn ${currentStatus === 'Blacklist' ? 'active-filter' : ''}`} // <--- Condition
         id="btnImport"
         onClick={() => onStatusChange('Blacklist')}
         size="sm"

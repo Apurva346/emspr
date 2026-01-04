@@ -8,7 +8,13 @@
 }
 
 /* जे सिलेक्ट नाहीत त्यांची ओपॅसिटी थोडी कमी ठेवू जेणेकरून सिलेक्टेड बटन उठून दिसेल */
-.btn-grad, .btn-logout {
+/* .btn-grad, .btn-logout {
+    opacity: 0.7;
+    transition: all 0.3s ease;
+} */
+
+
+.opa {
     opacity: 0.7;
     transition: all 0.3s ease;
 }
