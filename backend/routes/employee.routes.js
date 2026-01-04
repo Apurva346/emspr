@@ -232,6 +232,7 @@ router.post('/employees', authenticateToken, async (req, res) => {
         const normalize = (v) => v?.toLowerCase().trim().replace(/\s+/g, '-');
 
 
+
         // 🔑 TEXT → ID mapping (NORMALIZED)
         const department_id = await getIdByName('department', normalize(department), db);
         const status_id = await getIdByName('status', normalize(status), db);
@@ -296,115 +297,7 @@ router.post('/employees', authenticateToken, async (req, res) => {
     }
 });
 
-
-//update
-
-//normalization
-// router.put('/employees/:id', authenticateToken, async (req, res) => {
-//     try {
-//         const { id } = req.params;
-//         const {
-//             name, position, email, phone, gender, joining, leaving,
-//             department, status, working_mode, emp_type, salary,
-//             profile_pic, manager, birth, education, address,
-//             emer_cont_no, relation, referred_by, additional_information
-//         } = req.body;
-
-//         // 🔁 TEXT → ID mapping
-//         const department_id = await getIdByName('department', department.toLowerCase(), db);
-//         const status_id     = await getIdByName('status', status.toLowerCase(), db);
-//         const mode_id       = await getIdByName('working_mode', working_mode.toLowerCase(), db); 
-//         const emp_type_id   = await getIdByName('emp_type', emp_type.toLowerCase(), db);
-
-//         if (!department_id || !status_id || !mode_id || !emp_type_id) {
-//             return res.status(400).json({ message: 'Invalid master data value' });
-//         }
-
-//         const query = `
-//             UPDATE home SET
-//                 name=?, position=?, email=?, phone=?, gender=?,
-//                 joining=?, leaving=?,
-//                 department_id=?, status_id=?, mode_id=?, emp_type_id=?,
-//                 salary=?, profile_pic=?, manager=?, birth=?, education=?,
-//                 address=?, emer_cont_no=?, relation=?, referred_by=?, additional_information=?
-//             WHERE id=?
-//         `;
-
-//         const values = [
-//             name, position, email, phone, gender,
-//             joining || null, leaving || null,
-//             department_id, status_id, mode_id, emp_type_id,
-//             salary, profile_pic || '', manager || '',
-//             birth || null, education,
-//             address || '', emer_cont_no || '',
-//             relation || '', referred_by || '', additional_information || '',
-//             id
-//         ];
-
-//         db.query(query, values, (err, result) => {
-//             if (err) {
-//                 console.error(err);
-//                 return res.status(500).json({ message: 'Update failed' });
-//             }
-
-//             if (result.affectedRows === 0) {
-//                 return res.status(404).json({ message: 'Employee not found' });
-//             }
-
-//             res.status(200).json({ message: 'Employee updated successfully' });
-//         });
-
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).json({ message: 'Server error' });
-//     }
-// });
-
-// router.put('/employees/:id', authenticateToken, async (req, res) => {
-//     try {
-//         const { id } = req.params;
-//         const {
-//             name, position, email, phone, gender, joining, leaving,
-//             department_id, status_id, mode_id, emp_type_id, salary, // थेट ID वापरा
-//             profile_pic, manager, birth, education, address,
-//             emer_cont_no, relation, referred_by, additional_information
-//         } = req.body;
-
-//         const query = `
-//             UPDATE home SET
-//                 name=?, position=?, email=?, phone=?, gender=?,
-//                 joining=?, leaving=?,
-//                 department_id=?, status_id=?, mode_id=?, emp_type_id=?,
-//                 salary=?, profile_pic=?, manager=?, birth=?, education=?,
-//                 address=?, emer_cont_no=?, relation=?, referred_by=?, additional_information=?
-//             WHERE id=?
-//         `;
-
-//         const values = [
-//             name, position, email, phone, (gender || "").toLowerCase(),
-//             joining || null, leaving || null,
-//             department_id, status_id, mode_id, emp_type_id,
-//             salary, profile_pic || '', manager || '',
-//             birth || null, education,
-//             address || '', emer_cont_no || '',
-//             relation || '', referred_by || '', additional_information || '',
-//             id
-//         ];
-
-//         db.query(query, values, (err, result) => {
-//             if (err) {
-//                 console.error(err);
-//                 return res.status(500).json({ message: 'Update failed' });
-//             }
-//             res.status(200).json({ message: 'Employee updated successfully' });
-//         });
-
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).json({ message: 'Server error' });
-//     }
-// });
-
+//normalization update
 router.put('/employees/:id', authenticateToken, async (req, res) => {
     try {
         const { id } = req.params;
@@ -597,48 +490,6 @@ router.get('/employees', authenticateToken, (req, res) => {
 
 
 // ==================== GET EMPLOYEE BY ID (Protected) ====================
-// router.get('/employees/:id', authenticateToken, (req, res) => {
-//     const employeeId = req.params.id;
-//     db.query('SELECT * FROM home WHERE id = ?', [employeeId], (err, results) => {
-//         if (err) return res.status(500).json({ message: 'Internal server error.' });
-//         if (results.length > 0) res.status(200).json(results[0]);
-//         else res.status(404).json({ message: 'Employee not found.' });
-//     });
-// });
-
-// router.get('/employees/:id', authenticateToken, (req, res) => {
-//     const employeeId = req.params.id;
-
-//     // आपण 'home' टेबलला मास्टर टेबल्ससोबत जोडत आहोत (JOIN)
-//     const sql = `
-//         SELECT 
-//             h.*, 
-//             d.name AS department_name, 
-//             s.name AS status_name, 
-//             wm.name AS mode_name, 
-//             et.name AS emp_type_name
-//         FROM home h
-//         LEFT JOIN department d ON h.department_id = d.id
-//         LEFT JOIN status s ON h.status_id = s.id
-//         LEFT JOIN working_mode wm ON h.mode_id = wm.id
-//         LEFT JOIN emp_type et ON h.emp_type_id = et.id
-//         WHERE h.id = ?
-//     `;
-
-//     db.query(sql, [employeeId], (err, results) => {
-//         if (err) {
-//             console.error("Database Error:", err);
-//             return res.status(500).json({ message: 'Internal server error.' });
-//         }
-        
-//         if (results.length > 0) {
-//             res.status(200).json(results[0]);
-//         } else {
-//             res.status(404).json({ message: 'Employee not found.' });
-//         }
-//     });
-// });
-
 router.get('/employees/:id', authenticateToken, (req, res) => {
     const employeeId = req.params.id;
 
@@ -683,6 +534,7 @@ router.post(
     if (!req.file) {
       return res.status(400).json({ message: 'No file uploaded.' });
     }
+    const normalize = (v) => v?.toLowerCase().trim().replace(/\s+/g, '-');
 
     const filePath = req.file.path;
     const employeesToInsert = [];
@@ -723,7 +575,7 @@ router.post(
         employeesToInsert.push([
           safe(row.name), safe(row.position), safe(row.email), safe(row.phone),
           safe(row.gender), normalizeDate(row.joining), normalizeDate(row.leaving),
-          safe(row.department), safe(row.status), safe(row.working_mode), safe(row.emp_type),
+          normalize(row.department), normalize(row.status), normalize(row.working_mode), normalize(row.emp_type),
           safe(row.salary), safe(row.profile_pic) || '', safe(row.manager),
           normalizeDate(row.birth), safe(row.education), safe(row.address),
           safe(row.emer_cont_no), safe(row.relation), safe(row.referred_by),
