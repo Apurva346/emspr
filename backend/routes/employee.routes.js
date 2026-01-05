@@ -244,17 +244,95 @@ router.post('/employees', authenticateToken, async (req, res) => {
 });
 
 //normalization update
+// router.put('/employees/:id', authenticateToken, async (req, res) => {
+//     try {
+//         const { id } = req.params;
+//         const {
+//             name, position, email, phone, gender, joining, leaving,
+//             department_id, status_id, mode_id, emp_type_id, salary, 
+//             profile_pic, manager, birth, education, address,
+//             emer_cont_no, relation, referred_by, additional_information
+//         } = req.body;
+
+//         // SQL Query - जिथे आपण थेट IDs वापरत आहोत
+//         const query = `
+//             UPDATE home SET
+//                 name=?, position=?, email=?, phone=?, gender=?,
+//                 joining=?, leaving=?,
+//                 department_id=?, status_id=?, mode_id=?, emp_type_id=?,
+//                 salary=?, profile_pic=?, manager=?, birth=?, education=?,
+//                 address=?, emer_cont_no=?, relation=?, referred_by=?, additional_information=?
+//             WHERE id=?
+//         `;
+
+//         const values = [
+//             name, position, email, phone, (gender || "").toLowerCase(),
+//             joining || null, leaving || null,
+//             Number(department_id),  // थेट ID
+//             Number(status_id),      // थेट ID
+//             Number(mode_id),        // थेट ID
+//             Number(emp_type_id),    // थेट ID
+//             salary, 
+//             profile_pic || '', 
+//             manager || '',
+//             birth || null, 
+//             education,
+//             address || '', 
+//             emer_cont_no || '',
+//             relation || '', 
+//             referred_by || '', 
+//             additional_information || '',
+//             id
+//         ];
+
+//         db.query(query, values, (err, result) => {
+//             if (err) {
+//                 console.error("Database Error:", err);
+//                 return res.status(500).json({ message: 'Update failed' });
+//             }
+
+//             if (result.affectedRows === 0) {
+//                 return res.status(404).json({ message: 'Employee not found' });
+//             }
+
+//             res.status(200).json({ message: 'Employee updated successfully' });
+//         });
+
+//     } catch (err) {
+//         console.error("Server Error:", err);
+//         res.status(500).json({ message: 'Server error' });
+//     }
+// });
+
 router.put('/employees/:id', authenticateToken, async (req, res) => {
     try {
         const { id } = req.params;
+
         const {
             name, position, email, phone, gender, joining, leaving,
-            department_id, status_id, mode_id, emp_type_id, salary, 
-            profile_pic, manager, birth, education, address,
-            emer_cont_no, relation, referred_by, additional_information
+            department_id, status_id, mode_id, emp_type_id,
+            salary, profile_pic, manager, birth, education,
+            address, emer_cont_no, relation, referred_by, additional_information
         } = req.body;
 
-        // SQL Query - जिथे आपण थेट IDs वापरत आहोत
+        // 🔹 Fetch old image
+        const [rows] = await db.promise().query(
+            'SELECT profile_pic FROM home WHERE id = ?',
+            [id]
+        );
+
+        if (!rows.length) {
+            return res.status(404).json({ message: 'Employee not found' });
+        }
+
+        const oldImage = rows[0].profile_pic;
+
+        // 🔹 Decide final image
+        const finalProfilePic =
+            profile_pic && profile_pic.startsWith('/uploads/')
+                ? profile_pic
+                : oldImage;
+
         const query = `
             UPDATE home SET
                 name=?, position=?, email=?, phone=?, gender=?,
@@ -266,41 +344,22 @@ router.put('/employees/:id', authenticateToken, async (req, res) => {
         `;
 
         const values = [
-            name, position, email, phone, (gender || "").toLowerCase(),
+            name, position, email, phone, gender,
             joining || null, leaving || null,
-            Number(department_id),  // थेट ID
-            Number(status_id),      // थेट ID
-            Number(mode_id),        // थेट ID
-            Number(emp_type_id),    // थेट ID
-            salary, 
-            profile_pic || '', 
-            manager || '',
-            birth || null, 
-            education,
-            address || '', 
-            emer_cont_no || '',
-            relation || '', 
-            referred_by || '', 
-            additional_information || '',
+            department_id, status_id, mode_id, emp_type_id,
+            salary, finalProfilePic, manager,
+            birth || null, education,
+            address, emer_cont_no, relation, referred_by, additional_information,
             id
         ];
 
-        db.query(query, values, (err, result) => {
-            if (err) {
-                console.error("Database Error:", err);
-                return res.status(500).json({ message: 'Update failed' });
-            }
+        await db.promise().query(query, values);
 
-            if (result.affectedRows === 0) {
-                return res.status(404).json({ message: 'Employee not found' });
-            }
-
-            res.status(200).json({ message: 'Employee updated successfully' });
-        });
+        res.json({ message: 'Employee updated successfully' });
 
     } catch (err) {
-        console.error("Server Error:", err);
-        res.status(500).json({ message: 'Server error' });
+        console.error('❌ UPDATE ERROR:', err);
+        res.status(500).json({ message: 'Update failed' });
     }
 });
 
