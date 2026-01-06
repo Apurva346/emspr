@@ -303,168 +303,6 @@ router.post('/employees', authenticateToken, async (req, res) => {
 //         res.status(500).json({ message: 'Server error' });
 //     }
 // });
-// router.put('/employees/:id', authenticateToken, async (req, res) => {
-//     try {
-//         const { id } = req.params;
-
-//         const {
-//             name, position, email, phone, gender, joining, leaving,
-//             department, status, working_mode, emp_type,
-//             salary, profile_pic, manager, birth, education,
-//             address, emer_cont_no, relation, referred_by, additional_information
-//         } = req.body;
-
-//         const normalize = v => v?.toLowerCase().trim();
-
-//         // 🔑 TEXT → ID mapping
-//         const department_id = await getIdByName('department', normalize(department), db);
-//         const status_id     = await getIdByName('status', normalize(status), db);
-//         const mode_id       = await getIdByName('mode', normalize(working_mode), db);
-//         const emp_type_id   = await getIdByName('emp_type', normalize(emp_type), db);
-
-//         if (!department_id || !status_id || !mode_id || !emp_type_id) {
-//             return res.status(400).json({ message: 'Invalid master data value' });
-//         }
-
-//         // 🔹 Fetch old image
-//         const [rows] = await db.promise().query(
-//             'SELECT profile_pic FROM home WHERE id = ?',
-//             [id]
-//         );
-
-//         if (!rows.length) {
-//             return res.status(404).json({ message: 'Employee not found' });
-//         }
-
-//         const oldImage = rows[0].profile_pic;
-
-//         const finalProfilePic =
-//             profile_pic && profile_pic.startsWith('/uploads/')
-//                 ? profile_pic
-//                 : oldImage;
-
-//         const query = `
-//             UPDATE home SET
-//                 name=?, position=?, email=?, phone=?, gender=?,
-//                 joining=?, leaving=?,
-//                 department_id=?, status_id=?, mode_id=?, emp_type_id=?,
-//                 salary=?, profile_pic=?, manager=?, birth=?, education=?,
-//                 address=?, emer_cont_no=?, relation=?, referred_by=?, additional_information=?
-//             WHERE id=?
-//         `;
-
-//         const values = [
-//             name, position, email, phone, gender?.toLowerCase(),
-//             joining || null, leaving || null,
-//             department_id, status_id, mode_id, emp_type_id,
-//             salary, finalProfilePic, manager || '',
-//             birth || null, education,
-//             address || '', emer_cont_no || '',
-//             relation || '', referred_by || '', additional_information || '',
-//             id
-//         ];
-
-//         await db.promise().query(query, values);
-
-//         res.json({ message: 'Employee updated successfully' });
-
-//     } catch (err) {
-//         console.error('❌ UPDATE ERROR:', err);
-//         res.status(500).json({ message: 'Update failed' });
-//     }
-// });
-
-
-// router.put('/employees/:id', authenticateToken, async (req, res) => {
-//     try {
-//         const { id } = req.params;
-
-//         const {
-//             name, position, email, phone, gender, joining, leaving,
-//             department, status, working_mode, emp_type,
-//             salary, profile_pic, manager, birth, education,
-//             address, emer_cont_no, relation, referred_by, additional_information
-//         } = req.body;
-
-//         // ✅ SAFE NORMALIZE (string + number support)
-//         const normalize = v =>
-//             v === null || v === undefined
-//                 ? null
-//                 : String(v).toLowerCase().trim();
-
-//         // 🔑 TEXT → ID mapping
-//         const department_id = await getIdByName('department', normalize(department), db);
-//         const status_id     = await getIdByName('status', normalize(status), db);
-//         const mode_id       = await getIdByName('working_mode', normalize(working_mode), db);
-//         const emp_type_id   = await getIdByName('emp_type', normalize(emp_type), db);
-
-//         if (!department_id || !status_id || !mode_id || !emp_type_id) {
-//             return res.status(400).json({ message: 'Invalid master data value' });
-//         }
-
-//         // 🔹 Fetch old image
-//         const [rows] = await db.promise().query(
-//             'SELECT profile_pic FROM home WHERE id = ?',
-//             [id]
-//         );
-
-//         if (!rows.length) {
-//             return res.status(404).json({ message: 'Employee not found' });
-//         }
-
-//         const oldImage = rows[0].profile_pic;
-
-//         // 🔹 Preserve old image if not changed
-//         const finalProfilePic =
-//             profile_pic && profile_pic.startsWith('/uploads/')
-//                 ? profile_pic
-//                 : oldImage;
-
-//         const query = `
-//             UPDATE home SET
-//                 name=?, position=?, email=?, phone=?, gender=?,
-//                 joining=?, leaving=?,
-//                 department_id=?, status_id=?, mode_id=?, emp_type_id=?,
-//                 salary=?, profile_pic=?, manager=?, birth=?, education=?,
-//                 address=?, emer_cont_no=?, relation=?, referred_by=?, additional_information=?
-//             WHERE id=?
-//         `;
-
-//         const values = [
-//             name,
-//             position,
-//             email,
-//             phone,
-//             gender?.toLowerCase() || null,
-//             joining || null,
-//             leaving || null,
-//             department_id,
-//             status_id,
-//             mode_id,
-//             emp_type_id,
-//             salary,
-//             finalProfilePic,
-//             manager || '',
-//             birth || null,
-//             education,
-//             address || '',
-//             emer_cont_no || '',
-//             relation || '',
-//             referred_by || '',
-//             additional_information || '',
-//             id
-//         ];
-
-//         await db.promise().query(query, values);
-
-//         res.json({ message: 'Employee updated successfully' });
-
-//     } catch (err) {
-//         console.error('❌ UPDATE ERROR:', err);
-//         res.status(500).json({ message: 'Update failed' });
-//     }
-// });
-
 router.put('/employees/:id', authenticateToken, async (req, res) => {
     try {
         const { id } = req.params;
@@ -481,32 +319,10 @@ router.put('/employees/:id', authenticateToken, async (req, res) => {
                 ? null
                 : String(v).toLowerCase().trim();
 
-        const department_id =
-            typeof department === 'number'
-                ? department
-                : await getIdByName('department', normalize(department), db);
-
-        const status_id =
-            typeof status === 'number'
-                ? status
-                : await getIdByName('status', normalize(status), db);
-
-        const mode_id =
-            typeof working_mode === 'number'
-                ? working_mode
-                : await getIdByName('working_mode', normalize(working_mode), db);
-
-        const emp_type_id =
-            typeof emp_type === 'number'
-                ? emp_type
-                : await getIdByName('emp_type', normalize(emp_type), db);
-
-        if (!department_id || !status_id || !mode_id || !emp_type_id) {
-            return res.status(400).json({ message: 'Invalid master data value' });
-        }
-
+        // 🔹 Fetch existing record (IMPORTANT)
         const [rows] = await db.promise().query(
-            'SELECT profile_pic FROM home WHERE id = ?',
+            `SELECT department_id, status_id, mode_id, emp_type_id, profile_pic 
+             FROM home WHERE id = ?`,
             [id]
         );
 
@@ -514,12 +330,47 @@ router.put('/employees/:id', authenticateToken, async (req, res) => {
             return res.status(404).json({ message: 'Employee not found' });
         }
 
-        const oldImage = rows[0].profile_pic;
+        const existing = rows[0];
 
+        // 🔑 SMART ID HANDLING (NEW OR OLD)
+        const department_id =
+            department != null
+                ? typeof department === 'number'
+                    ? department
+                    : await getIdByName('department', normalize(department), db)
+                : existing.department_id;
+
+        const status_id =
+            status != null
+                ? typeof status === 'number'
+                    ? status
+                    : await getIdByName('status', normalize(status), db)
+                : existing.status_id;
+
+        const mode_id =
+            working_mode != null
+                ? typeof working_mode === 'number'
+                    ? working_mode
+                    : await getIdByName('working_mode', normalize(working_mode), db)
+                : existing.mode_id;
+
+        const emp_type_id =
+            emp_type != null
+                ? typeof emp_type === 'number'
+                    ? emp_type
+                    : await getIdByName('emp_type', normalize(emp_type), db)
+                : existing.emp_type_id;
+
+        // ❌ Only fail if still invalid
+        if (!department_id || !status_id || !mode_id || !emp_type_id) {
+            return res.status(400).json({ message: 'Invalid master data value' });
+        }
+
+        // 🔹 Preserve image
         const finalProfilePic =
             profile_pic && profile_pic.startsWith('/uploads/')
                 ? profile_pic
-                : oldImage;
+                : existing.profile_pic;
 
         const query = `
             UPDATE home SET
@@ -565,6 +416,7 @@ router.put('/employees/:id', authenticateToken, async (req, res) => {
         res.status(500).json({ message: 'Update failed' });
     }
 });
+
 
 
 
