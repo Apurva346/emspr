@@ -416,7 +416,6 @@ router.post('/employees', authenticateToken, async (req, res) => {
 //         res.status(500).json({ message: 'Update failed' });
 //     }
 // });
-
 router.put('/employees/:id', authenticateToken, async (req, res) => {
     try {
         const { id } = req.params;
@@ -428,7 +427,7 @@ router.put('/employees/:id', authenticateToken, async (req, res) => {
             address, emer_cont_no, relation, referred_by, additional_information
         } = req.body;
 
-        // ✅ POST route ke jaisa exact normalization (space to dash)
+        // ✅ POST route ke jaisa exact normalization
         const normalize = (v) => 
             (v === null || v === undefined) 
                 ? null 
@@ -447,50 +446,27 @@ router.put('/employees/:id', authenticateToken, async (req, res) => {
 
         const existing = rows[0];
 
-        // 🔑 SMART ID HANDLING
-        const department_id =
-            department != null
-                ? typeof department === 'number'
-                    ? department
-                    : await getIdByName('department', normalize(department), db)
-                : existing.department_id;
+        // 🔑 SMART ID HANDLING WITH FALLBACKS
+        // Agar lookup null return karega toh 'existing' value use hogi, error nahi aayega.
+        
+        const department_id = (department != null)
+            ? (typeof department === 'number' ? department : (await getIdByName('department', normalize(department), db) || existing.department_id))
+            : existing.department_id;
 
-        const status_id =
-            status != null
-                ? typeof status === 'number'
-                    ? status
-                    : await getIdByName('status', normalize(status), db)
-                : existing.status_id;
+        const status_id = (status != null)
+            ? (typeof status === 'number' ? status : (await getIdByName('status', normalize(status), db) || existing.status_id))
+            : existing.status_id;
 
-        const mode_id =
-            working_mode != null
-                ? typeof working_mode === 'number'
-                    ? working_mode
-                    : await getIdByName('working_mode', normalize(working_mode), db)
-                : existing.mode_id;
+        const mode_id = (working_mode != null)
+            ? (typeof working_mode === 'number' ? working_mode : (await getIdByName('working_mode', normalize(working_mode), db) || existing.mode_id))
+            : existing.mode_id;
 
-        const emp_type_id =
-            emp_type != null
-                ? typeof emp_type === 'number'
-                    ? emp_type
-                    : await getIdByName('emp_type', normalize(emp_type), db)
-                : existing.emp_type_id;
+        const emp_type_id = (emp_type != null)
+            ? (typeof emp_type === 'number' ? emp_type : (await getIdByName('emp_type', normalize(emp_type), db) || existing.emp_type_id))
+            : existing.emp_type_id;
 
-        // 🔍 DEBUG LOGS (Inhe terminal mein check karein)
-        console.log("Update Debug - Final IDs:", { 
-            department_id, 
-            status_id, 
-            mode_id, 
-            emp_type_id 
-        });
-
-        // ❌ Validation: 0 ya undefined ko check karne ke liye better approach
-        if (department_id == null || status_id == null || mode_id == null || emp_type_id == null) {
-            return res.status(400).json({ 
-                message: 'Invalid master data value',
-                details: { department_id, status_id, mode_id, emp_type_id }
-            });
-        }
+        // 🔍 DEBUG LOGS
+        console.log("Final IDs for Update:", { department_id, status_id, mode_id, emp_type_id });
 
         // 🔹 Preserve image
         const finalProfilePic =
@@ -509,27 +485,13 @@ router.put('/employees/:id', authenticateToken, async (req, res) => {
         `;
 
         const values = [
-            name,
-            position,
-            email,
-            phone,
-            gender?.toLowerCase() || null,
-            joining || null,
-            leaving || null,
-            department_id,
-            status_id,
-            mode_id,
-            emp_type_id,
-            salary,
-            finalProfilePic,
-            manager || '',
-            birth || null,
-            education,
-            address || '',
-            emer_cont_no || '',
-            relation || '',
-            referred_by || '',
-            additional_information || '',
+            name, position, email, phone, gender?.toLowerCase() || null,
+            joining || null, leaving || null,
+            department_id, status_id, mode_id, emp_type_id,
+            salary, finalProfilePic, manager || '',
+            birth || null, education,
+            address || '', emer_cont_no || '',
+            relation || '', referred_by || '', additional_information || '',
             id
         ];
 
