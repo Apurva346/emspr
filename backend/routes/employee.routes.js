@@ -395,7 +395,7 @@ router.put('/employees/:id', authenticateToken, async (req, res) => {
         // 🔑 TEXT → ID mapping
         const department_id = await getIdByName('department', normalize(department), db);
         const status_id     = await getIdByName('status', normalize(status), db);
-        const mode_id       = await getIdByName('mode', normalize(working_mode), db);
+        const mode_id       = await getIdByName('working_mode', normalize(working_mode), db);
         const emp_type_id   = await getIdByName('emp_type', normalize(emp_type), db);
 
         if (!department_id || !status_id || !mode_id || !emp_type_id) {
