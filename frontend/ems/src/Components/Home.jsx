@@ -308,13 +308,6 @@ const Home = ({ loading, setTotalEmployees }) => {
                     <thead className="table-dark text-center">
                         <tr>
                             {/* Label badlun Sr. No. kela aahe */}
-                            <th onClick={() => handleSort('id')}>Sr. No. {getSortIcon('id')}</th>
-                            <th onClick={() => handleSort('name')}>Name {getSortIcon('name')}</th>
-                            <th onClick={() => handleSort('manager')}>Manager {getSortIcon('manager')}</th>
-                            <th onClick={() => handleSort('department')}>Department {getSortIcon('department')}</th>
-                            <th onClick={() => handleSort('salary')}>Salary {getSortIcon('salary')}</th>
-                            <th>Status</th>
-                            <th>Actions</th>
                             <th>
                                 <input
                                     type="checkbox"
@@ -322,6 +315,20 @@ const Home = ({ loading, setTotalEmployees }) => {
                                     onChange={handleSelectAll}
                                 />
                             </th>
+                            <th onClick={() => handleSort('id')}>Sr. No. {getSortIcon('id')}</th>
+                            <th onClick={() => handleSort('name')}>Name {getSortIcon('name')}</th>
+                            <th onClick={() => handleSort('manager')}>Manager {getSortIcon('manager')}</th>
+                            <th onClick={() => handleSort('department')}>Department {getSortIcon('department')}</th>
+                            <th onClick={() => handleSort('salary')}>Salary {getSortIcon('salary')}</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                            {/* <th>
+                                <input
+                                    type="checkbox"
+                                    checked={currentEmployees.every(emp => selectedEmployeeIds.includes(emp.id)) && currentEmployees.length > 0}
+                                    onChange={handleSelectAll}
+                                />
+                            </th> */}
                         </tr>
                     </thead>
 
@@ -343,6 +350,13 @@ const Home = ({ loading, setTotalEmployees }) => {
                             return (
                                 <tr key={employee.id}>
                                     {/* Sr. No. display logic */}
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedEmployeeIds.includes(employee.id)}
+                                            onChange={() => handleCheckboxChange(employee.id)}
+                                        />
+                                    </td>
                                     <td>{serialNumber}</td>
                                     <td className="capitalize-text">{employee.name}</td>
                                     <td className="capitalize-text">{employee.manager}</td>
@@ -366,13 +380,13 @@ const Home = ({ loading, setTotalEmployees }) => {
                                         </div>
                                     </td>
 
-                                    <td>
+                                    {/* <td>
                                         <input
                                             type="checkbox"
                                             checked={selectedEmployeeIds.includes(employee.id)}
                                             onChange={() => handleCheckboxChange(employee.id)}
                                         />
-                                    </td>
+                                    </td> */}
                                 </tr>
                             );
                         })}
@@ -394,7 +408,7 @@ const Home = ({ loading, setTotalEmployees }) => {
                     <Modal.Title>Employee Details</Modal.Title>
                 </Modal.Header>
                 <Modal.Body style={{ maxHeight: '70vh', overflowY: 'auto' }}>
-                    <EmployeeDetails employee={selectedEmployee} />
+                    <EmployeeDetails employee={selectedEmployee} onClose={() => setShowDetailsModal(false)} />
                 </Modal.Body>
             </Modal>
 
