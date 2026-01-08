@@ -132,7 +132,6 @@
 //   );
 // }
 
-
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../App.css';
@@ -149,18 +148,14 @@ export default function Login() {
   const [infoMessage, setInfoMessage] = useState(null); 
   const navigate = useNavigate();
 
-  const handleForgotPassword = () => {
-    setInfoMessage("Redirect to Forgot Password Page functionality is active.");
-    setTimeout(() => setInfoMessage(null), 3000); 
-  }
-
   const handleSubmit = async (event) => {
+    // 1. Page refresh hone se rokna (Sabse important)
     event.preventDefault();
-    setErrors(""); // Naye login attempt par purana error hatao
+    
+    // 2. Sirf login start hote hi states set karein
+    setErrors(""); 
     setSuccess("");
-    setInfoMessage(null); 
 
-    // Basic Validation: Agar khali hai toh backend par mat bhejo
     if (!username || !password) {
       setErrors("Please enter both username and password.");
       return;
@@ -173,16 +168,17 @@ export default function Login() {
       localStorage.setItem("token", token);
 
       setSuccess("Login successful!");
-      // 1 second baad navigate karein taaki user success message dekh sake
+      // Sirf success hone par navigate karein
       setTimeout(() => navigate("/home"), 1000);
       
     } catch (err) {
+      // 3. Error aane par message set hoga aur yahin rukega
       if (err.response && err.response.data) {
-        // Backend jo bhi error message bhejega (e.g. "Invalid credentials"), wo yahan set hoga
         setErrors(err.response.data.message || "Invalid username or password");
       } else {
         setErrors("An unexpected error occurred. Please try again later.");
       }
+      // Yahan koi timeout nahi hai, toh error gayab nahi hoga.
     }
   };
 
@@ -194,19 +190,11 @@ export default function Login() {
         background: 'linear-gradient(180deg, #7f66ab 0%, #563680 35%, #5d88c8 100%)' 
       }}
     >
-      
-      {infoMessage && (
-        <div className="alert alert-info fixed top-4 right-4 z-50 shadow-lg" role="alert">
-            {infoMessage}
-        </div>
-      )}
-
       <div className='card shadow-lg p-4 rounded' style={{ width: '350px' }}>
         <h4 className='login-text text-center mb-4'>Login</h4>
         
         <form onSubmit={handleSubmit}>
-          
-          {/* Username Input */}
+          {/* Username */}
           <div className='mb-3'>
             <label className='form-label'>Username</label>
             <input
@@ -214,11 +202,14 @@ export default function Login() {
               className='form-control'
               placeholder='Enter your username'
               value={username}
-              onChange={e => setUsername(e.target.value)}
+              onChange={e => {
+                setUsername(e.target.value);
+                if (errors) setErrors(""); // Type karte hi error hatayega
+              }}
             />
           </div>
 
-          {/* Password Input */}
+          {/* Password */}
           <div className='mb-3 position-relative'>
             <label className='form-label'>Password</label>
             <input
@@ -226,38 +217,27 @@ export default function Login() {
               className='form-control'
               placeholder='Enter your password'
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={e => {
+                setPassword(e.target.value);
+                if (errors) setErrors(""); // Type karte hi error hatayega
+              }}
             />
             <span
               onClick={() => setShowPassword(!showPassword)}
-              style={{
-                position: 'absolute',
-                right: '10px',
-                top: '38px',
-                cursor: 'pointer'
-              }}
+              style={{ position: 'absolute', right: '10px', top: '38px', cursor: 'pointer' }}
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </span>
           </div>
 
-          {/* 🔴 Login Status Feedback (Red for Errors, Green for Success) */}
-          <div style={{ minHeight: '30px' }} className="mb-2">
-            {errors && (
-              <div className="text-danger text-center small fw-bold">
-                {errors}
-              </div>
-            )}
-            {success && (
-              <div className="text-success text-center small fw-bold">
-                {success}
-              </div>
-            )}
+          {/* Error/Success Messages */}
+          <div style={{ minHeight: '30px' }} className="mb-2 text-center">
+            {errors && <small className="text-danger fw-bold">{errors}</small>}
+            {success && <small className="text-success fw-bold">{success}</small>}
           </div>
 
-          {/* Buttons */}
           <div className='d-grid'>
-            <button type='submit' className='btn btn-primary mb-2'>
+            <button type='submit' className='btn btn-primary'>
               Login
             </button>
           </div>
